@@ -1,0 +1,165 @@
+/*
+ * Datenbankvorlage Kartenabfrage
+* Version 1.4
+ * @Autor 2021 Florian Dagner
+ * @license CC0 Public Domain Dedication
+* Drog.js v1.2.1
+ * [Back-compatibility: IE11+]
+ * Copyright (c) 2021, Emanuel Rojas Vásquez
+ * BSD 3-Clause License
+ * https://github.com/erovas/Drog.js
+ */
+
+.board {
+  display: flex;
+  flex-wrap: wrap;
+}
+
+[data-drog] {
+  cursor: move;
+  min-height: 50px;
+}
+
+.item {}
+
+.karte img {
+  max-width: 270px;
+}
+
+audio,
+video {
+  max-width: 99%;
+}
+
+.karte2 img {
+  max-width: 800px;
+}
+
+.f {
+  background-color: #f8f8f8;
+}
+
+.fweiß {
+  background-color: #ffffff;
+  color: #000;
+}
+
+.fgelb {
+  background-color: #ffff00;
+  color: #000;
+}
+
+.frosa {
+  background-color: #FFF0F5;
+  color: #000;
+}
+
+.fblau {
+  background-color: #CEECF5;
+  color: #000;
+}
+
+.fgrün {
+  background-color: #B1FF65;
+  color: #000;
+}
+
+.karte {
+  box-shadow: silver 4px 4px 4px;
+  width: 276px;
+  margin-right: 25px;
+  margin-bottom: 25px;
+  padding: 4px;
+  -webkit-column-break-inside: avoid;
+  -moz-column-break-inside: avoid;
+  column-break-inside: avoid;
+}
+
+.karte2 {
+  box-shadow: silver 4px 4px 4px;
+  width: 810px;
+  margin-right: 25px;
+  margin-bottom: 25px;
+  padding: 4px;
+  -webkit-column-break-inside: avoid;
+  -moz-column-break-inside: avoid;
+  column-break-inside: avoid;
+}
+
+.einklappenja {
+  display: none;
+}
+
+.faussortiert {
+  order: 2;
+  background-color: #cccccc;
+  text-decoration: line-through;
+}
+
+.dropdown-menu .icon.fa.fa-search-plus.fa-fw::after {
+  content: " Einzelansicht";
+  font-family: "Titillium Web", Arial, sans-serif;
+}
+
+.dropdown-menu .icon.fa.fa-cog.fa-fw::after {
+  content: " Bearbeiten";
+  font-family: "Titillium Web", Arial, sans-serif;
+}
+
+.dropdown-menu .icon.fa.fa-trash.fa-fw::after {
+  content: " Löschen";
+  font-family: "Titillium Web", Arial, sans-serif;
+}
+
+.dropdown-menu .icon.fa.fa-ban.fa-fw.iconsmall::after {
+  content: " Nicht freigeben";
+  font-family: "Titillium Web", Arial, sans-serif;
+}
+
+.dropdown-menu .icon.fa.fa-thumbs-up.fa-fw.iconsmall::after {
+  content: " Zulassen";
+  font-family: "Titillium Web", Arial, sans-serif;
+}
+
+.dropdown-item:empty {
+  display: none;
+}
+
+.comment-list, .comment-ctrl {
+  font-size: 0.8rem;
+}
+
+.hidden {
+  display: none;
+}
+
+/* Style für Druck  */
+@media print {
+
+  /* Not displayed in print version. */
+  #page-header,
+  #page-footer,
+  .intro,
+  .nav-tabs,
+  .datapreferences,
+  .btn-secondary,
+  i.icon,
+  .comment-area,
+  .pagination,
+  input,
+  .activity-navigation,
+  .activity-information,
+  .fixed-top,
+  .container,
+  .mbsmenubar,
+  .top-bar,
+  #me-wrapper,
+  .body img,
+  #mbsmenubar,
+  #mebis-footer,
+  #menu-sidebar-menu,
+  .row {
+    display: none;
+    background: none;
+  }
+}

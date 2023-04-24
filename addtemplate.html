@@ -1,13 +1,51 @@
 <div class="defaulttemplate">
-  <table class="mod-data-default-template ##approvalstatusclass##">
+  <table class="table">
     <tbody>
-      <tr class="">
-        <td class="template-field cell c0" style="">Idee: </td>
-        <td class="template-token cell c1 lastcol" style="">[[Idee]]</td>
+      <tr>
+        <th class="alert-primary">Idee: </td>
+        <td>[[Idee]]</td>
+      </tr>
+      <tr>
+        <th class="alert-primary">Zeichnung: </td>
+        <td>
+<div>
+<canvas id="canvas" width="800" height="400"></canvas><br>
+<input type="button" vlass="btn btn-secondary" onclick="javascript:clearArea();clearAreaText();return false;" value="Zeichenfläche leeren">
+<script>function clearAreaText() {
+  var textarea = document.getElementById("[[Whiteboard#id]]");
+  textarea.value = "";
+}</script>
+Linenstärke: <select id="selWidth">
+<option value="1">1</option>
+<option value="2">2</option>
+<option value="3">3</option>
+<option value="4" selected="selected">4</option>
+<option value="5">5</option>
+<option value="6">6</option>
+<option value="7">7</option>
+<option value="8">8</option>   
+<option value="9">9</option> 
+<option value="10">10</option>  
+<option value="11">11</option>
+<option value="12">12</option>
+</select>
+Stiftfarbe wählen: <input type="color" id="selColor" name="selColor"><br>
+<script>
+// Farbe aus ColorPicker auslesen
+var theInput = document.getElementById("selColor");
+var theColor = theInput.value;
+theInput.addEventListener("input", function() {
+
+// Farbcode (Hex) schreiben
+document.getElementById("selColor").value = theInput.value;
+}, false);
+</script>
+
+</div></td>
       </tr>
       <tr class="lastrow">
-        <td class="template-field cell c0" style="">Farbe: </td>
-        <td class="template-token cell c1 lastcol" style="">[[Farbe]]</td>
+        <th class="alert-primary">Farbe: </td>
+        <td>[[Farbe]]</td>
       </tr>
     </tbody>
   </table>
@@ -22,8 +60,8 @@
     <table class="mod-data-default-template ##approvalstatusclass##">
       <tbody>
         <tr class="">
-          <td class="template-field cell c0" style="">Einklappen:&nbsp;</td>
-          <td class="template-token cell c1 lastcol" style="">[[Einklappen]]&nbsp;</td>
+          <td>Einklappen:&nbsp;</td>
+          <td>[[Einklappen]]&nbsp;</td>
         </tr>
       </tbody>
     </table>
@@ -39,3 +77,250 @@
   let idnummer = Date.now() + Math.random();
   document.getElementById("[[ID#id]]").value = idnummer;
 </script>
+
+<div class="dataurl" style="display:none">
+[[Whiteboard]]
+</div>
+
+<script>
+// Das imgtemplate-Element verwenden
+var imgBackground2 = new Image();
+imgBackground2.onload = function() {
+  // Canvas-Größe an die Größe des Bildes anpassen
+  canvas.width = canvas.offsetWidth;
+  canvas.height = canvas.offsetHeight;
+
+  // Größenverhältnis des Bildes berechnen
+  var ratio = Math.min(canvas.width / imgBackground2.width, canvas.height / imgBackground2.height);
+
+  // Neue Größe des Bildes berechnen
+  var newWidth = imgBackground2.width * ratio;
+  var newHeight = imgBackground2.height * ratio;
+
+  // Bild als Hintergrundbild für das Canvas
+  canvas.style.backgroundImage = 'url(' + imgBackground2.src + ')';
+  canvas.style.backgroundSize = newWidth + 'px ' + newHeight + 'px';
+  canvas.style.backgroundRepeat = 'no-repeat';
+
+  // Hintergrundbild zentrieren
+  canvas.style.backgroundPosition = 'center';
+};
+imgBackground2.src = imgTemplate;
+</script>
+<script>
+// Seite nach Data-URLs durchsuchen
+var divElement = document.querySelector('div.dataurl');
+var dataURLs = divElement.innerHTML.match(/data:image\/png;base64,[^'"]+/g);
+
+// Wenn eine Data-URL gefunden wurde, diese in das Canvas-Element laden
+if (dataURLs && dataURLs.length > 0) {
+  var img = new Image();
+  img.onload = function() {
+    context.drawImage(img, 0, 0);
+  };
+  img.src = dataURLs[0];
+} else if (divElement.textContent.includes("data:image")) {
+  // Wenn das dataurl-Element keinen img-Tag enthält, aber einen Textinhalt mit Data-URL enthält
+  var img = new Image();
+  img.onload = function() {
+    context.drawImage(img, 0, 0);
+  };
+  img.src = divElement.textContent.match(/data:image\/png;base64,[^'"]+/g)[0];
+};
+</script> 
+
+<script>
+const canvas = document.getElementById('canvas');
+const context = canvas.getContext('2d');
+let isDrawing = false;
+let x = 0;
+let y = 0;
+var offsetX;
+var offsetY;
+
+function startup() {
+  canvas.addEventListener('touchstart', handleStart);
+  canvas.addEventListener('touchend', handleEnd);
+  canvas.addEventListener('touchcancel', handleCancel);
+  canvas.addEventListener('touchmove', handleMove);
+  canvas.addEventListener('mousedown', (e) => {
+    x = e.offsetX;
+    y = e.offsetY;
+    isDrawing = true;
+  });
+
+  canvas.addEventListener('mousemove', (e) => {
+    if (isDrawing) {
+      drawLine(context, x, y, e.offsetX, e.offsetY);
+      x = e.offsetX;
+      y = e.offsetY;
+    }
+  });
+
+  canvas.addEventListener('mouseup', (e) => {
+    if (isDrawing) {
+      drawLine(context, x, y, e.offsetX, e.offsetY);
+      x = 0;
+      y = 0;
+      isDrawing = false;
+    }
+  });
+}
+
+document.addEventListener("DOMContentLoaded", startup);
+
+const ongoingTouches = [];
+
+function handleStart(evt) {
+  evt.preventDefault();
+  const touches = evt.changedTouches;
+  offsetX = canvas.getBoundingClientRect().left;
+  offsetY = canvas.getBoundingClientRect().top;
+  for (let i = 0; i < touches.length; i++) {
+    ongoingTouches.push(copyTouch(touches[i]));
+  }
+}
+
+function handleMove(evt) {
+  evt.preventDefault();
+  const touches = evt.changedTouches;
+  for (let i = 0; i < touches.length; i++) {
+    const color = document.getElementById('selColor').value;
+    const idx = ongoingTouchIndexById(touches[i].identifier);
+    if (idx >= 0) {
+      context.beginPath();
+      context.moveTo(ongoingTouches[idx].clientX - offsetX, ongoingTouches[idx].clientY - offsetY);
+      context.lineTo(touches[i].clientX - offsetX, touches[i].clientY - offsetY);
+      context.lineWidth = document.getElementById('selWidth').value;
+      context.strokeStyle = color;
+      context.lineJoin = "round";
+      context.closePath();
+      context.stroke();
+      ongoingTouches.splice(idx, 1, copyTouch(touches[i]));  // swap in the new touch record
+    }
+  }
+}
+
+function handleEnd(evt) {
+  evt.preventDefault();
+  const touches = evt.changedTouches;
+  for (let i = 0; i < touches.length; i++) {
+    const color = document.getElementById('selColor').value;
+    let idx = ongoingTouchIndexById(touches[i].identifier);
+    if (idx >= 0) {
+      context.lineWidth = document.getElementById('selWidth').value;
+      context.fillStyle = color;
+      ongoingTouches.splice(idx, 1);  // remove it; we're done
+    }
+  }
+}
+
+function handleCancel(evt) {
+  evt.preventDefault();
+  const touches = evt.changedTouches;
+  for (let i = 0; i < touches.length; i++) {
+    let idx = ongoingTouchIndexById(touches[i].identifier);
+    ongoingTouches.splice(idx, 1);  // remove it; we're done
+  }
+}
+
+function copyTouch({ identifier, clientX, clientY }) {
+  return { identifier, clientX, clientY };
+}
+
+function ongoingTouchIndexById(idToFind) {
+  for (let i = 0; i < ongoingTouches.length; i++) {
+    const id = ongoingTouches[i].identifier;
+    if (id === idToFind) {
+      return i;
+    }
+  }
+  return -1;    // not found
+}
+
+function drawLine(context, x1, y1, x2, y2) {
+  context.beginPath();
+  context.strokeStyle = document.getElementById('selColor').value;
+  context.lineWidth = document.getElementById('selWidth').value;
+  context.lineJoin = "round";
+  context.moveTo(x1, y1);
+  context.lineTo(x2, y2);
+  context.closePath();
+  context.stroke();
+}
+
+function clearArea() {
+    context.setTransform(1, 0, 0, 1, 0, 0);
+    context.clearRect(0, 0, context.canvas.width, context.canvas.height);
+}
+</script>
+
+<script>
+// Debounce function
+function debounce(func, wait) {
+  let timeout;
+  return function() {
+    const context = this;
+    const args = arguments;
+    clearTimeout(timeout);
+    document.getElementById("message").style.visibility = "visible"; // Show message
+    timeout = setTimeout(() => {
+      func.apply(context, args);
+      document.getElementById("message").style.visibility = "hidden"; // Hide message
+    }, wait);
+  };
+}
+
+
+// Event-Listener auf das Canvas setzen
+canvas.addEventListener("mousedown", debounce(function() {
+  var textarea = document.getElementById("[[Whiteboard#id]]");
+  // Canvas-Inhalt als Data-URL abrufen
+  var dataURL = canvas.toDataURL();
+  // Data-URL in Textarea einfügen
+  textarea.value = dataURL;
+}, 1000)); // Wartezeit in Millisekunden
+
+canvas.addEventListener("mousemove", debounce(function() {
+  var textarea = document.getElementById("[[Whiteboard#id]]");
+  // Canvas-Inhalt als Data-URL abrufen
+  var dataURL = canvas.toDataURL();
+  // Data-URL in Textarea einfügen
+  textarea.value = dataURL;
+}, 1000)); // Wartezeit in Millisekunden
+
+canvas.addEventListener("mouseup", debounce(function() {
+  var textarea = document.getElementById("[[Whiteboard#id]]");
+  // Canvas-Inhalt als Data-URL abrufen
+  var dataURL = canvas.toDataURL();
+  // Data-URL in Textarea einfügen
+  textarea.value = dataURL;
+}, 1000)); // Wartezeit in Millisekunden
+
+// Event-Listener auf das Canvas setzen
+canvas.addEventListener("touchstart", debounce(function() {
+  var textarea = document.getElementById("[[Whiteboard#id]]");
+  // Canvas-Inhalt als Data-URL abrufen
+  var dataURL = canvas.toDataURL();
+  // Data-URL in Textarea einfügen
+  textarea.value = dataURL;
+}, 1000)); // Wartezeit in Millisekunden
+
+canvas.addEventListener("touchmove", debounce(function() {
+  var textarea = document.getElementById("[[Whiteboard#id]]");
+  // Canvas-Inhalt als Data-URL abrufen
+  var dataURL = canvas.toDataURL();
+  // Data-URL in Textarea einfügen
+  textarea.value = dataURL;
+}, 1000)); // Wartezeit in Millisekunden
+
+canvas.addEventListener("touchend", debounce(function() {
+  var textarea = document.getElementById("[[Whiteboard#id]]");
+  // Canvas-Inhalt als Data-URL abrufen
+  var dataURL = canvas.toDataURL();
+  // Data-URL in Textarea einfügen
+  textarea.value = dataURL;
+}, 1000)); // Wartezeit in Millisekunden
+
+</script>
+<div id="message" class="alert alert-danger" style="visibility: hidden;margin: auto 0;">Zeichnung wird aktualisiert, bitte warten...</div>

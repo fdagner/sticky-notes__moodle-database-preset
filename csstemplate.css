@@ -101,6 +101,12 @@ video {
   font-family: "Titillium Web", Arial, sans-serif;
 }
 
+// new in moodle 41.
+.dropdown-menu .icon.fa.fa-pencil.fa-fw::after {
+content: " Bearbeiten";
+font-family: "Titillium Web",Arial,sans-serif;
+}
+
 .dropdown-menu .icon.fa.fa-cog.fa-fw::after {
   content: " Bearbeiten";
   font-family: "Titillium Web", Arial, sans-serif;
@@ -131,6 +137,15 @@ video {
 
 .hidden {
   display: none;
+}
+
+canvas {
+  border: 1px solid black;
+}
+
+.dataurlview {
+max-width: 100%;
+background-size: 100% auto;
 }
 
 /* Style für Druck  */

@@ -1,4 +1,33 @@
 </div>
 
+<script>
 
+// Wähle alle div-Elemente mit der Klasse "dataurlview" aus 
+let dataurlviews = document.querySelectorAll(".dataurlview");
+
+// Das imgtemplate-Element verwenden
+let imgBackground = new Image();
+imgBackground.onload = function() {
+  // Größe jedes dataurlview-Elements anpassen
+  dataurlviews.forEach(function(dataurlview) {
+    dataurlview.style.width = dataurlview.offsetWidth + "px";
+    dataurlview.style.height = dataurlview.offsetHeight + "px";
+
+    // Größenverhältnis des Bildes berechnen
+    let ratio = Math.min(dataurlview.offsetWidth / imgBackground.width, dataurlview.offsetHeight / imgBackground.height);
+
+    // Neue Größe des Bildes berechnen
+    let newWidth = imgBackground.width * ratio;
+    let newHeight = imgBackground.height * ratio;
+
+    // Bild als Hintergrundbild setzen
+    dataurlview.style.backgroundImage = 'url(' + imgBackground.src + ')';
+  dataurlview.style.backgroundSize = newWidth + 'px ' + newHeight + 'px';
+    dataurlview.style.backgroundRepeat = 'no-repeat';
+    dataurlview.style.backgroundPosition = 'center';
+  });
+};
+imgBackground.src = imgTemplate;
+
+</script>
 

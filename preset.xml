@@ -2,7 +2,7 @@
 
 <settings>
 <intro></intro>
-<comments>1</comments>
+<comments>0</comments>
 <requiredentries>0</requiredentries>
 <requiredentriestoview>0</requiredentriestoview>
 <maxentries>0</maxentries>
@@ -45,6 +45,12 @@ nein</param1>
 <field>
 <type>text</type>
 <name>ID</name>
+<required>0</required>
+</field>
+
+<field>
+<type>text</type>
+<name>Whiteboard</name>
 <required>0</required>
 </field>
 

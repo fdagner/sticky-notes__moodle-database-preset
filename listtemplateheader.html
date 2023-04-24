@@ -1,27 +1,5 @@
 <form></form>
-<style>
-    .datapreferences {
-        display: none
-    }
 
-    #searchbutton2 {
-        display: none
-    }
-</style>
-<div>
-    <input type="button" class="btn btn-secondary" id="searchbutton" onclick="changeStyle()" value="Suche öffnen">
-    <input type="button" class="btn btn-secondary" id="searchbutton2" onclick="changeStyle2()" value="Suche schließen">
-</div>
-<script>function changeStyle() {
-        document.getElementsByClassName("datapreferences")[0].style.display = "block";
-        document.getElementById("searchbutton").style.display = "none";
-        document.getElementById("searchbutton2").style.display = "inline";
-    }
-    function changeStyle2() {
-        document.getElementsByClassName("datapreferences")[0].style.display = "none";
-        document.getElementById("searchbutton2").style.display = "none";
-        document.getElementById("searchbutton").style.display = "inline";
-    }</script>
 <div class="text-right d-print-none ion-hide">
     <label for="checkbox1" onClick="save()"><input type="checkbox" id="checkbox1"> Automatisch
         aktualisieren</input></label>

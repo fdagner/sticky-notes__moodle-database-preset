@@ -1,5 +1,6 @@
 // URL zum Hintergrundbild
-let imgTemplate = "https://upload.wikimedia.org/wikipedia/commons/thumb/6/63/Human_eye_-_blue.JPG/1280px-Human_eye_-_blue.JPG?uselang=de";
+let imgTemplate = "";
+
 
 /*!
  * Drog.js v1.2.1

@@ -1,7 +1,7 @@
 </div>
 
 <script>
-
+window.onload = function() {
 // Wähle alle div-Elemente mit der Klasse "dataurlview" aus 
 let dataurlviews = document.querySelectorAll(".dataurlview");
 
@@ -22,12 +22,22 @@ imgBackground.onload = function() {
 
     // Bild als Hintergrundbild setzen
     dataurlview.style.backgroundImage = 'url(' + imgBackground.src + ')';
-  dataurlview.style.backgroundSize = newWidth + 'px ' + newHeight + 'px';
+    dataurlview.style.backgroundSize = newWidth + 'px ' + newHeight + 'px';
     dataurlview.style.backgroundRepeat = 'no-repeat';
     dataurlview.style.backgroundPosition = 'center';
   });
 };
 imgBackground.src = imgTemplate;
-
+};
 </script>
-
+<script>
+let whiteboardcontents = document.getElementsByClassName("whiteboardcontent");
+for (let i = 0; i < whiteboardcontents.length; i++) {
+    let whiteboardcontent = whiteboardcontents[i];
+    if (whiteboardcontent.src === "") {
+        whiteboardcontent.style.display = "none";
+    } else {
+        whiteboardcontent.style.display = "block";
+    }
+}
+</script>

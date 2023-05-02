@@ -1,53 +1,43 @@
 <div class="defaulttemplate">
   <table class="table">
     <tbody>
+     </tr>
+      <tr class="lastrow">
+        <th class="alert-secondary">Farbe: </td>
+        <td id="setcolor">[[Farbe]]</td>
+      </tr>
       <tr>
-        <th class="alert-primary">Idee: </td>
+        <th class="alert-secondary">Idee: </td>
         <td>[[Idee]]</td>
       </tr>
       <tr>
-        <th class="alert-primary">Zeichnung: </td>
+        <th class="alert-secondary">Zeichnung: </td>
         <td>
-<div>
-<canvas id="canvas" width="800" height="400"></canvas><br>
-<input type="button" vlass="btn btn-secondary" onclick="javascript:clearArea();clearAreaText();return false;" value="Zeichenfläche leeren">
-<script>function clearAreaText() {
-  var textarea = document.getElementById("[[Whiteboard#id]]");
-  textarea.value = "";
-}</script>
-Linenstärke: <select id="selWidth">
-<option value="1">1</option>
-<option value="2">2</option>
-<option value="3">3</option>
-<option value="4" selected="selected">4</option>
-<option value="5">5</option>
-<option value="6">6</option>
-<option value="7">7</option>
-<option value="8">8</option>   
-<option value="9">9</option> 
-<option value="10">10</option>  
-<option value="11">11</option>
-<option value="12">12</option>
-</select>
-Stiftfarbe wählen: <input type="color" id="selColor" name="selColor"><br>
+<details open><summary class="btn btn-secondary">Whiteboard</summary><hr>
+<div style="width:780px;padding: 4px">
+<i class="fa fa-pencil"></i> <select id="selWidth">
+<option value="1">1</option> <option value="2">2</option> <option value="3">3</option> <option value="4" selected="selected">4</option> <option value="5">5</option> <option value="6">6</option> <option value="8">8</option> <option value="10">10</option> <option value="12">12</option> <option value="14">14</option> <option value="16">16</option> <option value="18">18</option> <option value="20">20</option> </select>
+<i style="margin-left: 10px" class="fa fa-paint-brush"></i> <input type="color" id="selColor" name="selColor" style="vertical-align: middle">
 <script>
 // Farbe aus ColorPicker auslesen
 var theInput = document.getElementById("selColor");
 var theColor = theInput.value;
 theInput.addEventListener("input", function() {
-
 // Farbcode (Hex) schreiben
 document.getElementById("selColor").value = theInput.value;
 }, false);
 </script>
-
-</div></td>
-      </tr>
-      <tr class="lastrow">
-        <th class="alert-primary">Farbe: </td>
-        <td>[[Farbe]]</td>
-      </tr>
-    </tbody>
+<label style="margin-left: 10px"> <i class="fa fa-eraser"></i> <input class="btn" type="checkbox" id="eraserCheckbox"></label>
+</div>
+<canvas id="canvas" width="800" height="400">Your browser does not support the HTML canvas tag.</canvas><br>
+<input type="button" class="btn btn-secondary" onclick="javascript:clearArea();clearAreaText();return false;" value="Zeichenfläche leeren">
+<script>function clearAreaText() {
+  var textarea = document.getElementById("[[Whiteboard#id]]");
+  textarea.value = "";
+}</script>
+</details>
+</td>
+ </tr>    </tbody>
   </table>
   <p>
     <a class="btn btn-primary" data-toggle="collapse" href="#collapseEins" role="button" aria-expanded="false"
@@ -137,6 +127,7 @@ let x = 0;
 let y = 0;
 var offsetX;
 var offsetY;
+var isEraser = false;
 
 function startup() {
   canvas.addEventListener('touchstart', handleStart);
@@ -148,22 +139,31 @@ function startup() {
     y = e.offsetY;
     isDrawing = true;
   });
-
   canvas.addEventListener('mousemove', (e) => {
     if (isDrawing) {
-      drawLine(context, x, y, e.offsetX, e.offsetY);
+      if (isEraser) {
+        eraseLine(context, x, y, e.offsetX, e.offsetY);
+      } else {
+        drawLine(context, x, y, e.offsetX, e.offsetY);
+      }
       x = e.offsetX;
       y = e.offsetY;
     }
   });
-
   canvas.addEventListener('mouseup', (e) => {
     if (isDrawing) {
-      drawLine(context, x, y, e.offsetX, e.offsetY);
+      if (isEraser) {
+        eraseLine(context, x, y, e.offsetX, e.offsetY);
+      } else {
+        drawLine(context, x, y, e.offsetX, e.offsetY);
+      }
       x = 0;
       y = 0;
       isDrawing = false;
     }
+  });
+  document.getElementById('eraserCheckbox').addEventListener('change', (e) => {
+    isEraser = e.target.checked;
   });
 }
 
@@ -182,45 +182,51 @@ function handleStart(evt) {
 }
 
 function handleMove(evt) {
-  evt.preventDefault();
-  const touches = evt.changedTouches;
-  for (let i = 0; i < touches.length; i++) {
-    const color = document.getElementById('selColor').value;
-    const idx = ongoingTouchIndexById(touches[i].identifier);
-    if (idx >= 0) {
-      context.beginPath();
-      context.moveTo(ongoingTouches[idx].clientX - offsetX, ongoingTouches[idx].clientY - offsetY);
-      context.lineTo(touches[i].clientX - offsetX, touches[i].clientY - offsetY);
-      context.lineWidth = document.getElementById('selWidth').value;
-      context.strokeStyle = color;
-      context.lineJoin = "round";
-      context.closePath();
-      context.stroke();
-      ongoingTouches.splice(idx, 1, copyTouch(touches[i]));  // swap in the new touch record
+    evt.preventDefault();
+    const touches = evt.changedTouches;
+    for (let i = 0; i < touches.length; i++) {
+      const color = document.getElementById('selColor').value;
+      const idx = ongoingTouchIndexById(touches[i].identifier);
+      if (idx >= 0) {
+        context.beginPath();
+        context.moveTo(ongoingTouches[idx].clientX - offsetX, ongoingTouches[idx].clientY - offsetY);
+        context.lineTo(touches[i].clientX - offsetX, touches[i].clientY - offsetY);
+        context.lineWidth = document.getElementById('selWidth').value;
+        context.strokeStyle = color;
+        context.lineJoin = "round";
+        context.closePath();
+        if (isEraser) {
+          context.globalCompositeOperation = "destination-out";
+context.lineWidth = document.getElementById('selWidth').value +4;
+        } else {
+          context.globalCompositeOperation = "source-over";
+        }
+        context.stroke();
+        ongoingTouches.splice(idx, 1, copyTouch(touches[i])); // swap in the new touch record
+      }
     }
   }
-}
 
-function handleEnd(evt) {
-  evt.preventDefault();
-  const touches = evt.changedTouches;
-  for (let i = 0; i < touches.length; i++) {
-    const color = document.getElementById('selColor').value;
-    let idx = ongoingTouchIndexById(touches[i].identifier);
-    if (idx >= 0) {
-      context.lineWidth = document.getElementById('selWidth').value;
-      context.fillStyle = color;
-      ongoingTouches.splice(idx, 1);  // remove it; we're done
+ function handleEnd(evt) {
+    evt.preventDefault();
+    const touches = evt.changedTouches;
+    for (let i = 0; i < touches.length; i++) {
+      const color = document.getElementById('selColor').value;
+      let idx = ongoingTouchIndexById(touches[i].identifier);
+      if (idx >= 0) {
+        context.lineWidth = document.getElementById('selWidth').value;
+        context.fillStyle = color;
+        ongoingTouches.splice(idx, 1); // remove it; we're done
+      }
     }
   }
-}
 
 function handleCancel(evt) {
   evt.preventDefault();
   const touches = evt.changedTouches;
   for (let i = 0; i < touches.length; i++) {
     let idx = ongoingTouchIndexById(touches[i].identifier);
-    ongoingTouches.splice(idx, 1);  // remove it; we're done
+    ongoingTouches.splice(idx, 1); // remove it; we're done
   }
 }
 
@@ -235,7 +241,7 @@ function ongoingTouchIndexById(idToFind) {
       return i;
     }
   }
-  return -1;    // not found
+  return -1; // not found
 }
 
 function drawLine(context, x1, y1, x2, y2) {
@@ -249,9 +255,21 @@ function drawLine(context, x1, y1, x2, y2) {
   context.stroke();
 }
 
+function eraseLine(context, x1, y1, x2, y2) {
+  context.globalCompositeOperation = "destination-out";
+  context.beginPath();
+  context.lineWidth = document.getElementById('selWidth').value + 4;
+  context.lineJoin = "round";
+  context.moveTo(x1, y1);
+  context.lineTo(x2, y2);
+  context.closePath();
+  context.stroke();
+  context.globalCompositeOperation = "source-over";
+}
+
 function clearArea() {
-    context.setTransform(1, 0, 0, 1, 0, 0);
-    context.clearRect(0, 0, context.canvas.width, context.canvas.height);
+  context.setTransform(1, 0, 0, 1, 0, 0);
+  context.clearRect(0, 0, context.canvas.width, context.canvas.height);
 }
 </script>
 
@@ -279,7 +297,7 @@ canvas.addEventListener("mousedown", debounce(function() {
   var dataURL = canvas.toDataURL();
   // Data-URL in Textarea einfügen
   textarea.value = dataURL;
-}, 1000)); // Wartezeit in Millisekunden
+}, 500)); // Wartezeit in Millisekunden
 
 canvas.addEventListener("mousemove", debounce(function() {
   var textarea = document.getElementById("[[Whiteboard#id]]");
@@ -287,7 +305,7 @@ canvas.addEventListener("mousemove", debounce(function() {
   var dataURL = canvas.toDataURL();
   // Data-URL in Textarea einfügen
   textarea.value = dataURL;
-}, 1000)); // Wartezeit in Millisekunden
+}, 500)); // Wartezeit in Millisekunden
 
 canvas.addEventListener("mouseup", debounce(function() {
   var textarea = document.getElementById("[[Whiteboard#id]]");
@@ -295,7 +313,7 @@ canvas.addEventListener("mouseup", debounce(function() {
   var dataURL = canvas.toDataURL();
   // Data-URL in Textarea einfügen
   textarea.value = dataURL;
-}, 1000)); // Wartezeit in Millisekunden
+}, 500)); // Wartezeit in Millisekunden
 
 // Event-Listener auf das Canvas setzen
 canvas.addEventListener("touchstart", debounce(function() {
@@ -304,7 +322,7 @@ canvas.addEventListener("touchstart", debounce(function() {
   var dataURL = canvas.toDataURL();
   // Data-URL in Textarea einfügen
   textarea.value = dataURL;
-}, 1000)); // Wartezeit in Millisekunden
+}, 500)); // Wartezeit in Millisekunden
 
 canvas.addEventListener("touchmove", debounce(function() {
   var textarea = document.getElementById("[[Whiteboard#id]]");
@@ -312,7 +330,7 @@ canvas.addEventListener("touchmove", debounce(function() {
   var dataURL = canvas.toDataURL();
   // Data-URL in Textarea einfügen
   textarea.value = dataURL;
-}, 1000)); // Wartezeit in Millisekunden
+}, 500)); // Wartezeit in Millisekunden
 
 canvas.addEventListener("touchend", debounce(function() {
   var textarea = document.getElementById("[[Whiteboard#id]]");
@@ -320,7 +338,31 @@ canvas.addEventListener("touchend", debounce(function() {
   var dataURL = canvas.toDataURL();
   // Data-URL in Textarea einfügen
   textarea.value = dataURL;
-}, 1000)); // Wartezeit in Millisekunden
+}, 500)); // Wartezeit in Millisekunden
 
 </script>
 <div id="message" class="alert alert-danger" style="visibility: hidden;margin: auto 0;">Zeichnung wird aktualisiert, bitte warten...</div>
+
+<script>
+window.onload = function() {
+  var details = document.querySelector("details");
+  details.open = false;
+};
+</script>
+
+<script>
+	const radios = document.getElementsByName('[[Farbe#id]]');
+// Überprüfen, welches Radio-Button ausgewählt ist
+		for (let i = 0; i < radios.length; i++) {
+			if (radios[i].checked) {
+				canvas.className = 'f' + radios[i].value;
+			}
+		}
+
+		// Hinzufügen eines "change"-Ereignisses zu jedem Radio-Button
+		for (let i = 0; i < radios.length; i++) {
+			radios[i].addEventListener('change', function() {
+				canvas.className = 'f' + this.value;
+			});
+		}
+	</script>

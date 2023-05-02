@@ -1,7 +1,7 @@
 <div>
   <div class="f[[Farbe]] karte2" style="margin: 0px auto;">##userpicture## <span class=""
       style="font-size: small;"><strong>##user## </strong>hat geschrieben:</span>
-    <div><br><span style="font-family: &quot;Trebuchet MS&quot;, Helvetica, sans-serif;"></span>[[Idee]]<br><div class="dataurlview"><img src="[[Whiteboard]]"></div>
+    <div><br><span style="font-family: &quot;Trebuchet MS&quot;, Helvetica, sans-serif;"></span>[[Idee]]<br><div class="dataurlview" id="dataurlview"><img id="whiteboardcontent" src="[[Whiteboard]]"></div>
       <hr id="null">
     </div>
     <div style="text-align: right;font-size: small;">
@@ -12,7 +12,7 @@
   </div>
 </div>
 <script>
-
+window.onload = function() {
 // Wähle alle div-Elemente mit der Klasse "dataurlview" aus 
 let dataurlviews = document.querySelectorAll(".dataurlview");
 
@@ -40,4 +40,14 @@ imgBackground.onload = function() {
 };
 imgBackground.src = imgTemplate;
 
+};
 </script>
+
+<script>
+let whiteboardcontent = document.getElementById("whiteboardcontent");
+if (whiteboardcontent.src === "") {
+    whiteboardcontent.style.display = "none";
+} else {
+    whiteboardcontent.style.display = "block";
+}
+</script> 

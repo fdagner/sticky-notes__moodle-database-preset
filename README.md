@@ -3,8 +3,8 @@
 Sticky Notes is a preset for the Moodle activity database.
 
 HTML Canvas Drawing With Mouse and Touch
-Lei Mao
-https://leimao.github.io/blog/HTML-Canvas-Mouse-Touch-Drawing/
+
+Lei Mao: https://leimao.github.io/blog/HTML-Canvas-Mouse-Touch-Drawing/
 
 ## Description
 

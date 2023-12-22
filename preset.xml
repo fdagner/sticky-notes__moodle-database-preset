@@ -17,11 +17,11 @@
 <type>radiobutton</type>
 <name>Farbe</name>
 <required>0</required>
-<param1>weiß
-gelb
-rosa
-blau
-grün</param1>
+<param1>white
+yellow
+pink
+blue
+green</param1>
 </field>
 
 <field>
@@ -38,8 +38,8 @@ grün</param1>
 <type>radiobutton</type>
 <name>Einklappen</name>
 <required>0</required>
-<param1>ja
-nein</param1>
+<param1>yes
+no</param1>
 </field>
 
 <field>

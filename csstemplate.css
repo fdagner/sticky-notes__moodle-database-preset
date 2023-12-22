@@ -38,27 +38,27 @@ video {
   background-color: #f8f8f8;
 }
 
-.fweiß {
+.fwhite {
   background-color: #ffffff;
   color: #000;
 }
 
-.fgelb {
+.fyellow {
   background-color: #ffff00;
   color: #000;
 }
 
-.frosa {
+.fpink {
   background-color: #fff0f5;
   color: #000;
 }
 
-.fblau {
+.fblue {
   background-color: #ceecf5;
   color: #000;
 }
 
-.fgrün {
+.fgreen {
   background-color: #b1ff65;
   color: #000;
 }
@@ -85,7 +85,7 @@ video {
   column-break-inside: avoid;
 }
 
-.einklappenja {
+.einklappenyes {
   display: none;
 }
 
@@ -96,37 +96,37 @@ video {
 }
 
 .dropdown-menu .icon.fa.fa-search-plus.fa-fw::after {
-  content: " Einzelansicht";
+  content: " Single View";
   font-family: "Titillium Web", Arial, sans-serif;
   font-size: small;
 }
 
 .dropdown-menu .icon.fa.fa-pencil.fa-fw::after {
-  content: " Bearbeiten";
+  content: " Edit";
   font-family: "Titillium Web", Arial, sans-serif;
   font-size: small;
 }
 
 .dropdown-menu .icon.fa.fa-cog.fa-fw::after {
-  content: " Bearbeiten";
+  content: " Edit";
   font-family: "Titillium Web", Arial, sans-serif;
   font-size: small;
 }
 
 .dropdown-menu .icon.fa.fa-trash.fa-fw::after {
-  content: " Löschen";
+  content: " Delete";
   font-family: "Titillium Web", Arial, sans-serif;
   font-size: small;
 }
 
 .dropdown-menu .icon.fa.fa-ban.fa-fw.iconsmall::after {
-  content: " Nicht freigeben";
+  content: " Not Allow";
   font-family: "Titillium Web", Arial, sans-serif;
   font-size: small;
 }
 
 .dropdown-menu .icon.fa.fa-thumbs-up.fa-fw.iconsmall::after {
-  content: " Zulassen";
+  content: " Allow";
   font-family: "Titillium Web", Arial, sans-serif;
   font-size: small;
 }

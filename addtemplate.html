@@ -3,15 +3,15 @@
     <tbody>
      </tr>
       <tr class="lastrow">
-        <th class="alert-secondary">Farbe: </td>
+        <th class="alert-secondary">Color: </td>
         <td id="setcolor">[[Farbe]]</td>
       </tr>
       <tr>
-        <th class="alert-secondary">Idee: </td>
+        <th class="alert-secondary">Idea: </td>
         <td>[[Idee]]</td>
       </tr>
       <tr>
-        <th class="alert-secondary">Zeichnung: </td>
+        <th class="alert-secondary">Drawing: </td>
         <td>
 <details open><summary class="btn btn-secondary">Whiteboard</summary><hr>
 <div style="width:780px;padding: 4px">
@@ -30,7 +30,7 @@ document.getElementById("selColor").value = theInput.value;
 <label style="margin-left: 10px"> <i class="fa fa-eraser"></i> <input class="btn" type="checkbox" id="eraserCheckbox"></label>
 </div>
 <canvas id="canvas" width="800" height="400">Your browser does not support the HTML canvas tag.</canvas><br>
-<input type="button" class="btn btn-secondary" onclick="javascript:clearArea();clearAreaText();return false;" value="Zeichenfläche leeren">
+<input type="button" class="btn btn-secondary" onclick="javascript:clearArea();clearAreaText();return false;" value="Delete Drawing">
 <script>function clearAreaText() {
   var textarea = document.getElementById("[[Whiteboard#id]]");
   textarea.value = "";
@@ -42,7 +42,7 @@ document.getElementById("selColor").value = theInput.value;
   <p>
     <a class="btn btn-primary" data-toggle="collapse" href="#collapseEins" role="button" aria-expanded="false"
       aria-controls="collapseEins">
-      Weitere Einstellungen
+      Further settings
     </a>
   </p>
 
@@ -50,7 +50,7 @@ document.getElementById("selColor").value = theInput.value;
     <table class="mod-data-default-template ##approvalstatusclass##">
       <tbody>
         <tr class="">
-          <td>Einklappen:&nbsp;</td>
+          <td>Collapse:&nbsp;</td>
           <td>[[Einklappen]]&nbsp;</td>
         </tr>
       </tbody>
@@ -341,7 +341,7 @@ canvas.addEventListener("touchend", debounce(function() {
 }, 500)); // Wartezeit in Millisekunden
 
 </script>
-<div id="message" class="alert alert-danger" style="visibility: hidden;margin: auto 0;">Zeichnung wird aktualisiert, bitte warten...</div>
+<div id="message" class="alert alert-danger" style="visibility: hidden;margin: auto 0;">Drawing will be updated, please wait...</div>
 
 <script>
 window.onload = function() {

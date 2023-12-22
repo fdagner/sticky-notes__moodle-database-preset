@@ -1,53 +1,68 @@
 <div>
-  <div class="f[[Farbe]] karte2" style="margin: 0px auto;">##userpicture## <span class=""
-      style="font-size: small;"><strong>##user## </strong>hat geschrieben:</span>
-    <div><br><span style="font-family: &quot;Trebuchet MS&quot;, Helvetica, sans-serif;"></span>[[Idee]]<br><div class="dataurlview" id="dataurlview"><img id="whiteboardcontent" src="[[Whiteboard]]"></div>
-      <hr id="null">
+  <div class="f[[Farbe]] karte2" style="margin: 0px auto">
+    ##userpicture##
+    <span class="" style="font-size: small"
+      ><strong>##user## </strong>hat geschrieben:</span
+    >
+    <div>
+      <br /><span
+        style="font-family: 'Trebuchet MS', Helvetica, sans-serif"
+      ></span
+      >[[Idee]]<br />
+      <div class="dataurlview" id="dataurlview">
+        <img id="whiteboardcontent" src="[[Whiteboard]]" />
+      </div>
+      <hr id="null" />
     </div>
-    <div style="text-align: right;font-size: small;">
-      <div style="float: left">##comments## </div>
+    <div style="text-align: right; font-size: small">
+      <div style="float: left">##comments##</div>
       <div></div>
-      <div style="float: right;text-align: right">##approve## ##edit## ##delete##</div><br>
+      <div style="float: right; text-align: right">
+        ##approve## ##edit## ##delete##
+      </div>
+      <br />
     </div>
   </div>
 </div>
 <script>
-window.onload = function() {
-// Wähle alle div-Elemente mit der Klasse "dataurlview" aus 
-let dataurlviews = document.querySelectorAll(".dataurlview");
+  window.onload = function () {
+    // Wähle alle div-Elemente mit der Klasse "dataurlview" aus
+    let dataurlviews = document.querySelectorAll(".dataurlview");
 
-// Das imgtemplate-Element verwenden
-let imgBackground = new Image();
-imgBackground.onload = function() {
-  // Größe jedes dataurlview-Elements anpassen
-  dataurlviews.forEach(function(dataurlview) {
-    dataurlview.style.width = dataurlview.offsetWidth + "px";
-    dataurlview.style.height = dataurlview.offsetHeight + "px";
+    // Das imgtemplate-Element verwenden
+    let imgBackground = new Image();
+    imgBackground.onload = function () {
+      // Größe jedes dataurlview-Elements anpassen
+      dataurlviews.forEach(function (dataurlview) {
+        dataurlview.style.width = dataurlview.offsetWidth + "px";
+        dataurlview.style.height = dataurlview.offsetHeight + "px";
 
-    // Größenverhältnis des Bildes berechnen
-    let ratio = Math.min(dataurlview.offsetWidth / imgBackground.width, dataurlview.offsetHeight / imgBackground.height);
+        // Größenverhältnis des Bildes berechnen
+        let ratio = Math.min(
+          dataurlview.offsetWidth / imgBackground.width,
+          dataurlview.offsetHeight / imgBackground.height
+        );
 
-    // Neue Größe des Bildes berechnen
-    let newWidth = imgBackground.width * ratio;
-    let newHeight = imgBackground.height * ratio;
+        // Neue Größe des Bildes berechnen
+        let newWidth = imgBackground.width * ratio;
+        let newHeight = imgBackground.height * ratio;
 
-    // Bild als Hintergrundbild setzen
-    dataurlview.style.backgroundImage = 'url(' + imgBackground.src + ')';
-  dataurlview.style.backgroundSize = newWidth + 'px ' + newHeight + 'px';
-    dataurlview.style.backgroundRepeat = 'no-repeat';
-    dataurlview.style.backgroundPosition = 'center';
-  });
-};
-imgBackground.src = imgTemplate;
-
-};
+        // Bild als Hintergrundbild setzen
+        dataurlview.style.backgroundImage = "url(" + imgBackground.src + ")";
+        dataurlview.style.backgroundSize = newWidth + "px " + newHeight + "px";
+        dataurlview.style.backgroundRepeat = "no-repeat";
+        dataurlview.style.backgroundPosition = "center";
+      });
+    };
+    imgBackground.src = imgTemplate;
+  };
 </script>
 
 <script>
-let whiteboardcontent = document.getElementById("whiteboardcontent");
-if (whiteboardcontent.src === "") {
+  let whiteboardcontent = document.getElementById("whiteboardcontent");
+  if (whiteboardcontent.src === "") {
     whiteboardcontent.style.display = "none";
-} else {
+  } else {
     whiteboardcontent.style.display = "block";
-}
-</script> 
+  }
+</script>

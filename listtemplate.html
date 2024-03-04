@@ -1,31 +1,19 @@
 <div class="item">
-  <form name="drag-head[[ID]]">
-    <div class="f[[Farbe]] karte [[Einklappen]]">
+  <form name="drag-head##id##">
+    <div class="karte" style="background-color: [[Color]]">
       <div class="dropdown dropleft" style="float:right">
-        <button class="btn" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true"
-          aria-expanded="false" style="color: #000!important">
-          <i class="fa fa-bars"></i>
-        </button>
-        <div class="dropdown-menu">
-          <div class="dropdown-item">##more##</div>
-          <div class="dropdown-item">##edit##</div>
-          <div class="dropdown-item">##approve####disapprove##</div>
-          <div class="dropdown-divider"></div>
-          <div class="dropdown-item">##delete##</div>
-        </div>
+       ##actionsmenu##
       </div>##userpicture## <span class="" style="font-size: small;"><strong>##user## </strong></span>
       <div data-drog>
-        <div class="einklappen[[Einklappen]]"><br><span
-            style="font-family: &quot;Trebuchet MS&quot;, Helvetica, sans-serif;">[[Idee]]</span></div><div class="dataurlview"><img class="whiteboardcontent" src="[[Whiteboard]]"></div>
+     <br><span>[[Note]]</span></div><div class="dataurlview"><img class="whiteboardcontent" src="[[Whiteboard]]"></div>
         <div style="text-align: right;font-size: small;">
           <hr id="null">
         ##comments## </div><div>
           <div></div>
         </div>
       </div>
-    </div>
   </form>
 </div>
 <script>
-  Drog.on(document.forms['drag-head[[ID]]']);
+  Drog.on(document.forms['drag-head##id##']);
 </script>

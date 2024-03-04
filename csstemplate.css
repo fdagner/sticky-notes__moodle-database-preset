@@ -13,12 +13,27 @@
   flex-wrap: wrap;
 }
 
+.table {
+max-width: 1200px;
+}
+
 [data-drog] {
   cursor: move;
   min-height: 50px;
 }
 
 .item {
+}
+
+#setcolor fieldset {
+display: flex;
+flex-direction: row;
+gap: 4px;
+}
+
+.userpicture, .userinitials.size-64 {
+width: 50px;
+height: 50px;
 }
 
 .karte img {
@@ -34,35 +49,6 @@ video {
   max-width: 800px;
 }
 
-.f {
-  background-color: #f8f8f8;
-}
-
-.fweiß {
-  background-color: #ffffff;
-  color: #000;
-}
-
-.fgelb {
-  background-color: #ffff00;
-  color: #000;
-}
-
-.frosa {
-  background-color: #fff0f5;
-  color: #000;
-}
-
-.fblau {
-  background-color: #ceecf5;
-  color: #000;
-}
-
-.fgrün {
-  background-color: #b1ff65;
-  color: #000;
-}
-
 .karte {
   box-shadow: silver 4px 4px 4px;
   width: 276px;
@@ -72,6 +58,8 @@ video {
   -webkit-column-break-inside: avoid;
   -moz-column-break-inside: avoid;
   column-break-inside: avoid;
+  background-color: #fff;
+  border-radius: 10px 10px 10px 10px;
 }
 
 .karte2 {
@@ -83,57 +71,9 @@ video {
   -webkit-column-break-inside: avoid;
   -moz-column-break-inside: avoid;
   column-break-inside: avoid;
+  border-radius: 10px 10px 10px 10px;
 }
 
-.einklappenja {
-  display: none;
-}
-
-.faussortiert {
-  order: 2;
-  background-color: #cccccc;
-  text-decoration: line-through;
-}
-
-.dropdown-menu .icon.fa.fa-search-plus.fa-fw::after {
-  content: " Einzelansicht";
-  font-family: "Titillium Web", Arial, sans-serif;
-  font-size: small;
-}
-
-.dropdown-menu .icon.fa.fa-pencil.fa-fw::after {
-  content: " Bearbeiten";
-  font-family: "Titillium Web", Arial, sans-serif;
-  font-size: small;
-}
-
-.dropdown-menu .icon.fa.fa-cog.fa-fw::after {
-  content: " Bearbeiten";
-  font-family: "Titillium Web", Arial, sans-serif;
-  font-size: small;
-}
-
-.dropdown-menu .icon.fa.fa-trash.fa-fw::after {
-  content: " Löschen";
-  font-family: "Titillium Web", Arial, sans-serif;
-  font-size: small;
-}
-
-.dropdown-menu .icon.fa.fa-ban.fa-fw.iconsmall::after {
-  content: " Nicht freigeben";
-  font-family: "Titillium Web", Arial, sans-serif;
-  font-size: small;
-}
-
-.dropdown-menu .icon.fa.fa-thumbs-up.fa-fw.iconsmall::after {
-  content: " Zulassen";
-  font-family: "Titillium Web", Arial, sans-serif;
-  font-size: small;
-}
-
-.dropdown-item:empty {
-  display: none;
-}
 
 .comment-list,
 .comment-ctrl {
@@ -153,10 +93,6 @@ canvas {
   background-size: 100% auto;
 }
 
-#setcolor fieldset {
-  display: flex;
-  flex-direction: row;
-}
 
 /* Style für Druck  */
 @media print {

@@ -1,8 +1,5 @@
-<form></form>
-
-<div class="text-right d-print-none ion-hide">
-    <label for="checkbox1" onClick="save()"><input type="checkbox" id="checkbox1"> Automatisch
-        aktualisieren</input></label>
+<form></form><div class="text-right d-print-none ion-hide">
+    <label for="checkbox1" onClick="save()"><input type="checkbox" id="checkbox1"> <i class="fa-solid fa-rotate" style="vertical-align: super;"></i></input></label>
 </div>
 <script>
     // Run once per session.
@@ -32,15 +29,14 @@
     // Get status of checkbox.
     var checked = JSON.parse(localStorage.getItem("checkbox1"));
     document.getElementById("checkbox1").checked = checked;
-
     // Reload if checkbox is checked.
     if (checkbox1.checked == true) {
-        // Reload single div every 2 sec.
+        // Reload single div every 4 sec.
         setInterval(function () {
-            $("#data-content").load(location.href + " #data-content>*", "");
-        }, 2000);
+ location.reload();
+        }, 4000);
     }
 </script>
 
 
-<div class="board" id="data-content">
+<div class="board" id="data-content" data-masonry='{"percentPosition": true }'>

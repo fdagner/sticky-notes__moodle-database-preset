@@ -1,5 +1,13 @@
 </div>
+<script>// Funktion zum Scrollen zum Anker
+function scrollToAnchor() {
+    // Nach dem Neuladen zur data-content-Ankerposition scrollen
+    document.getElementById('data-content').scrollIntoView();
+}
 
+// Eventlistener hinzufügen, um die Funktion scrollToAnchor nach dem Laden der Seite aufzurufen
+document.addEventListener('DOMContentLoaded', scrollToAnchor);
+</script>
 <script>
 window.onload = function() {
 // Wähle alle div-Elemente mit der Klasse "dataurlview" aus 
@@ -41,3 +49,33 @@ for (let i = 0; i < whiteboardcontents.length; i++) {
     }
 }
 </script>
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // Abrufen des Masonry-Containers
+    var grid = document.querySelector('.board');
+    
+    // Initialisierung von Masonry
+    var msnry = new Masonry(grid);
+    imagesLoaded( grid ).on( 'progress', function() {
+  // layout Masonry after each image loads
+  msnry.layout();
+});
+    
+    // Hinzufügen eines Event-Listeners für Klicks auf Elemente mit der Klasse "comment-link"
+    document.querySelectorAll('.comment-link').forEach(function(link) {
+        link.addEventListener('click', function() {
+            // Überprüfen, ob das Masonry-Layout bereits initialisiert wurde
+            if (msnry) {
+                // Warten Sie 1 Sekunde, bevor das Layout neu angeordnet wird
+                setTimeout(function() {
+                    // Layout neu anordnen, nachdem die Höhe des Kommentarfelds geändert wurde
+                    msnry.layout();
+                }, 250); // 250 Millisekunden = 0,25 Sekunden
+            }
+        });
+    });
+});
+</script>
+
+
+

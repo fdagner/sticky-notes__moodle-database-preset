@@ -3,15 +3,15 @@
     <tbody>
      </tr>
       <tr class="lastrow">
-        <th class="alert-secondary">Farbe: </td>
-        <td id="setcolor">[[Farbe]]</td>
+        <th class="alert-secondary"><i class="fa-solid fa-brush"></i> </td>
+        <td id="setcolor">[[Color]]</td>
       </tr>
       <tr>
-        <th class="alert-secondary">Idee: </td>
-        <td>[[Idee]]</td>
+        <th class="alert-secondary"><i class="fa-solid fa-lightbulb"></i> </td>
+        <td>[[Note]]</td>
       </tr>
       <tr>
-        <th class="alert-secondary">Zeichnung: </td>
+        <th class="alert-secondary"><i class="fa-solid fa-pencil"></i> </td>
         <td>
 <details open><summary class="btn btn-secondary">Whiteboard</summary><hr>
 <div style="width:780px;padding: 4px">
@@ -30,7 +30,7 @@ document.getElementById("selColor").value = theInput.value;
 <label style="margin-left: 10px"> <i class="fa fa-eraser"></i> <input class="btn" type="checkbox" id="eraserCheckbox"></label>
 </div>
 <canvas id="canvas" width="800" height="400">Your browser does not support the HTML canvas tag.</canvas><br>
-<input type="button" class="btn btn-secondary" onclick="javascript:clearArea();clearAreaText();return false;" value="Zeichenfläche leeren">
+<button type="button" class="btn btn-secondary" onclick="javascript:clearArea();clearAreaText();return false;"><i class="fa-solid fa-trash"></i></button>
 <script>function clearAreaText() {
   var textarea = document.getElementById("[[Whiteboard#id]]");
   textarea.value = "";
@@ -39,19 +39,13 @@ document.getElementById("selColor").value = theInput.value;
 </td>
  </tr>    </tbody>
   </table>
-  <p>
-    <a class="btn btn-primary" data-toggle="collapse" href="#collapseEins" role="button" aria-expanded="false"
-      aria-controls="collapseEins">
-      Weitere Einstellungen
-    </a>
-  </p>
 
   <div class="collapse" id="collapseEins">
     <table class="mod-data-default-template ##approvalstatusclass##">
       <tbody>
         <tr class="">
-          <td>Einklappen:&nbsp;</td>
-          <td>[[Einklappen]]&nbsp;</td>
+          <td><i class="fa-solid fa-down-left-and-up-right-to-center"></i>&nbsp;</td>
+          <td>&nbsp;</td>
         </tr>
       </tbody>
     </table>
@@ -59,13 +53,13 @@ document.getElementById("selColor").value = theInput.value;
 </div>
 <br>
 <div class="hidden">
-  <label for="[[ID#id]]"><span class="accesshide">ID</span></label>
-  <input class="basefieldinput form-control d-inline mod-data-input" type="text" name="[[ID#id]]" id="[[ID#id]]"
+  <label for=""><span class="accesshide">ID</span></label>
+  <input class="basefieldinput form-control d-inline mod-data-input" type="text" name="" id=""
     value="">
 </div>
 <script>
   let idnummer = Date.now() + Math.random();
-  document.getElementById("[[ID#id]]").value = idnummer;
+  document.getElementById("").value = idnummer;
 </script>
 
 <div class="dataurl" style="display:none">
@@ -341,7 +335,7 @@ canvas.addEventListener("touchend", debounce(function() {
 }, 500)); // Wartezeit in Millisekunden
 
 </script>
-<div id="message" class="alert alert-danger" style="visibility: hidden;margin: auto 0;">Zeichnung wird aktualisiert, bitte warten...</div>
+<div id="message" class="alert alert-danger" style="visibility: hidden;margin: auto 0;">Drawing will be updated, please wait...</div>
 
 <script>
 window.onload = function() {
@@ -351,18 +345,18 @@ window.onload = function() {
 </script>
 
 <script>
-	const radios = document.getElementsByName('[[Farbe#id]]');
+	const radios = document.getElementsByName('[[Color#id]]');
 // Überprüfen, welches Radio-Button ausgewählt ist
 		for (let i = 0; i < radios.length; i++) {
 			if (radios[i].checked) {
-				canvas.className = 'f' + radios[i].value;
+				canvas.style.backgroundColor = radios[i].value;
 			}
 		}
 
 		// Hinzufügen eines "change"-Ereignisses zu jedem Radio-Button
 		for (let i = 0; i < radios.length; i++) {
 			radios[i].addEventListener('change', function() {
-				canvas.className = 'f' + this.value;
+				canvas.style.backgroundColor = this.value;
 			});
 		}
 	</script>

@@ -1,20 +1,20 @@
 /*
- * Datenbankvorlage Sticky Notes
- * @Autor 2021 Florian Dagner
+ * Database preset Sticky Notes
+ * @Author 2021 Florian Dagner
  *
- * Modernisiertes Layout – reines CSS.
- * Das Board-Layout läuft über CSS-Spalten, Masonry/imagesLoaded werden nicht mehr benötigt.
- * Die Kartenfarbe steuert das Datenbankfeld "Color" über das Attribut data-color.
+ * Modernized layout – pure CSS.
+ * The board layout uses CSS columns; Masonry/imagesLoaded are no longer needed.
+ * The card color is controlled by the "Color" database field via the data-color attribute.
  */
 
 :root {
-  --sn-ink: #1f2937; /* Textfarbe auf den Karten (bleibt in Dark-Modes lesbar) */
+  --sn-ink: #1f2937; /* Text color on the cards (stays readable in dark modes) */
   --sn-radius: 10px;
   --sn-shadow: 0 1px 2px rgba(15, 23, 42, .10), 0 8px 20px rgba(15, 23, 42, .12);
   --sn-shadow-hover: 0 2px 4px rgba(15, 23, 42, .12), 0 16px 32px rgba(15, 23, 42, .18);
 }
 
-/* ---------- Board-Layout: CSS-Spalten statt Masonry ---------- */
+/* ---------- Board layout: CSS columns instead of Masonry ---------- */
 
 .board {
   columns: 280px;
@@ -27,7 +27,7 @@
   margin: 0 0 24px;
 }
 
-/* ---------- Karte ---------- */
+/* ---------- Card ---------- */
 
 .karte,
 .karte2 {
@@ -46,13 +46,13 @@
   margin: 0 auto 24px;
 }
 
-/* Kartenfarben aus dem Datenbankfeld (Werte: white, yellow, pink, lightblue, lightgreen) */
+/* Card colors from the database field (values: white, yellow, pink, lightblue, lightgreen) */
 .karte[data-color*="yellow"], .karte2[data-color*="yellow"]       { background-color: #fde047; }
 .karte[data-color*="pink"], .karte2[data-color*="pink"]          { background-color: #f9a8d4; }
 .karte[data-color*="lightblue"], .karte2[data-color*="lightblue"]   { background-color: #bfdbfe; }
 .karte[data-color*="lightgreen"], .karte2[data-color*="lightgreen"] { background-color: #bbf7d0; }
 
-/* Leichte, abwechselnde Drehung für den Sticky-Look */
+/* Slight alternating rotation for the sticky look */
 .item:nth-child(odd) .karte  { transform: rotate(-.5deg); }
 .item:nth-child(even) .karte { transform: rotate(.4deg); }
 .item:hover .karte {
@@ -60,7 +60,7 @@
   box-shadow: var(--sn-shadow-hover);
 }
 
-/* Gefaltete Ecke unten rechts */
+/* Folded corner at the bottom right */
 .karte::after,
 .karte2::after {
   content: "";
@@ -74,7 +74,7 @@
   pointer-events: none;
 }
 
-/* Kopf- und Fußbereich der Karte */
+/* Card head and footer */
 .note-head {
   display: flex;
   align-items: center;
@@ -106,9 +106,9 @@
   text-align: right;
 }
 
-/* Profilbilder rund statt eckig – bewusst mit !important, damit Theme-Regeln
-   (die .userpicture teils eckig formatieren) nicht dazwischenfunken.
-   userpicturecontainer: Moodle 4 packt das img in einen Wrapper-A/span-Container. */
+/* Profile pictures round instead of square – deliberately with !important so theme rules
+   (which sometimes format .userpicture square) cannot interfere.
+   userpicturecontainer: Moodle 4 wraps the img in a wrapper a/span container. */
 .note-head .userpicture,
 .note-head .userpicture img,
 .note-head .userpicturecontainer,
@@ -120,7 +120,7 @@
 
 .note-head .userpicturecontainer,
 .note-single .userpicturecontainer {
-  overflow: hidden; /* Wrapper cropt sonst das img wieder eckig */
+  overflow: hidden; /* otherwise the wrapper crops the img square again */
 }
 
 .userpicture,
@@ -130,7 +130,7 @@
   flex-shrink: 0;
 }
 
-/* Bilder und Videos in den Karten (Profilbilder ausgeschlossen – die bleiben rund) */
+/* Images and videos inside the cards (profile pictures excluded – they stay round) */
 .karte img:not(.userpicture),
 .karte2 img:not(.userpicture) {
   max-width: 100%;
@@ -139,7 +139,7 @@
 
 .dataurlview img {
   border: 1px solid rgba(15, 23, 42, .2);
-  background-color: #fff; /* Transparente Legacy-PNGs vor weißer Fläche statt Kartenfarbe */
+  background-color: #fff; /* transparent legacy PNGs on white surface instead of card color */
 }
 
 .dataurlview {
@@ -154,7 +154,7 @@
   border-radius: 6px;
 }
 
-/* ---------- Schnellfilter nach Kartenfarbe ---------- */
+/* ---------- Quick filter by card color ---------- */
 
 .note-filter {
   display: flex;
@@ -197,8 +197,8 @@
   box-shadow: 0 0 0 3px rgba(31, 41, 55, .35);
 }
 
-/* Bewertungen ("Likes") von Moodle optisch an die Karten anpassen.
-   Aktivierbar in den Datenbank-Einstellungen unter "Bewertungen". */
+/* Adapt the look of Moodle's ratings ("likes") to the cards.
+   Enable in the database settings under "Ratings". */
 .item .rating,
 .note-single .rating {
   margin-top: 4px;
@@ -216,13 +216,13 @@ video {
   font-size: .8rem;
 }
 
-/* ---------- Formular / Whiteboard ---------- */
+/* ---------- Form / Whiteboard ---------- */
 
 .table {
   max-width: 1200px;
 }
 
-/* Farb-Auswahl im Eintragsformular: Radio-Buttons als farbige Kacheln */
+/* Color selection in the entry form: radio buttons as color tiles */
 #setcolor fieldset {
   display: flex;
   flex-direction: row;
@@ -235,12 +235,12 @@ video {
   margin: 0;
 }
 
-/* Zeilenumbrüche des Radiobutton-Felds im Flex-Layout ausblenden */
+/* Hide the line breaks of the radiobutton field inside the flex layout */
 #setcolor br {
   display: none;
 }
 
-/* Radio unsichtbar, aber fokussierbar (Tastaturbedienung bleibt erhalten) */
+/* Radio invisible but focusable (keyboard operation is preserved) */
 #setcolor input[type="radio"] {
   position: absolute;
   width: 1px;
@@ -249,7 +249,7 @@ video {
   margin: 0;
 }
 
-/* Das Label wird zur Farb-Kachel; der Text bleibt für Screenreader erhalten */
+/* The label becomes the color tile; the text remains accessible for screen readers */
 #setcolor fieldset input[type="radio"] + label {
   flex: 0 0 auto;
   box-sizing: border-box;
@@ -296,7 +296,7 @@ video {
   margin: 0;
 }
 
-/* Farbwähler und Strichstärken-Dropdown */
+/* Color picker and stroke width dropdown */
 .board-toolbar input[type="color"] {
   width: 38px;
   height: 34px;
@@ -326,7 +326,7 @@ video {
   background-color: rgba(15, 23, 42, .06);
 }
 
-/* Werkzeug-Buttons (Radierer, Undo, Redo, Löschen) */
+/* Tool buttons (eraser, undo, redo, clear) */
 .tool-btn {
   width: 34px;
   height: 34px;
@@ -356,7 +356,7 @@ video {
   cursor: not-allowed;
 }
 
-/* Tastaturfokus deutlich markieren (Barrierefreiheit) */
+/* Make keyboard focus clearly visible (accessibility) */
 .board-toolbar input[type="color"]:focus-visible,
 .board-toolbar select:focus-visible,
 .tool-btn:focus-visible,
@@ -366,12 +366,12 @@ video {
   outline-offset: 2px;
 }
 
-/* Optionales Hintergrundbild-Feld bleibt unsichtbar */
+/* Optional background image field stays invisible */
 .whiteboard-raw {
   display: none;
 }
 
-/* Canvas: reagiert auf die Bildschirmbreite, Zeichenkoordinaten werden in JS gemappt */
+/* Canvas: follows the screen width, drawing coordinates are mapped in JS */
 canvas {
   width: 100%;
   max-width: 800px;
@@ -383,11 +383,11 @@ canvas {
   touch-action: none;
 }
 
-/* ---------- Style für Druck ---------- */
+/* ---------- Print styles ---------- */
 @media print {
-  /* Nicht mitdrucken: Moodle-Chrome, Werkzeuge und Bedienelemente.
-     Wichtig: .container/.row werden bewusst NICHT versteckt – sie umschließen
-     in den meisten Themes den gesamten Inhalt, die Karten wären sonst leer. */
+  /* Do not print: Moodle chrome, tools and controls.
+     Important: .container/.row are deliberately NOT hidden – in most themes they
+     wrap the entire content, so the cards would be empty. */
   #page-header,
   #page-footer,
   .intro,
@@ -416,7 +416,7 @@ canvas {
     background: none;
   }
 
-  /* Kartenfarben beim Drucken erhalten und ohne Schatten drucken */
+  /* Preserve card colors when printing and print without shadows */
   .karte,
   .karte2 {
     box-shadow: none;

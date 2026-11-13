@@ -59,21 +59,21 @@
     const context = canvas.getContext('2d');
     const colorInput = document.getElementById('selColor');
 
-    const strokes = [];      // Gespeicherte Striche (JSON-Format)
-    let redoStack = [];      // Für "Wiederholen"
-    let baseImage = null;    // Ältere Raster-Zeichnung (PNG-Data-URL), dient als Untergrund
+    const strokes = [];      // Stored strokes (JSON format)
+    let redoStack = [];      // For "Redo"
+    let baseImage = null;    // Legacy raster drawing (PNG data URL), used as background
     let baseImageObj = null;
-    let current = null;      // Strich, der gerade gezeichnet wird
+    let current = null;      // Stroke currently being drawn
     let curColor = '#000000';
     let curWidth = 4;
     let isEraser = false;
 
-    // Mindestabstand zwischen gespeicherten Punkten (normalisierte Koordinaten).
-    // Verhindert, dass große Zeichnungen das TEXT-Feldlimit sprengen (~64 KB),
-    // und macht die Einträge kleiner – ohne sichtbar ruckelige Linien.
+    // Minimum distance between stored points (normalized coordinates).
+    // Keeps large drawings from exceeding the TEXT field limit (~64 KB)
+    // and shrinks entries – without visibly wobbly lines.
     const MIN_POINT_DIST = 0.002;
 
-    // Zeigerposition als normalisierte Koordinate [0..1] relativ zur Zeichenfläche
+    // Pointer position as a normalized coordinate [0..1] relative to the canvas
     const toNorm = (e) => {
         const rect = canvas.getBoundingClientRect();
         const x = Math.min(Math.max((e.clientX - rect.left) / rect.width, 0), 1);
@@ -81,7 +81,7 @@
         return [Math.round(x * 1000) / 1000, Math.round(y * 1000) / 1000];
     };
 
-    // Gemeinsame Strich-Zeichenlogik aus jstemplate.js (window.StickyBoard.drawStroke)
+    // Shared stroke drawing logic from jstemplate.js (window.StickyBoard.drawStroke)
     const paintStroke = (stroke) => {
         if (!window.StickyBoard) {
             return;
@@ -89,7 +89,7 @@
         window.StickyBoard.drawStroke(context, stroke, canvas.width, canvas.height, canvas.width / 800);
     };
 
-    // Alle Striche neu zeichnen (nach Undo/Redo/Laden)
+    // Redraw all strokes (after undo/redo/load)
     const redraw = () => {
         if (!window.StickyBoard) {
             return;
@@ -101,7 +101,7 @@
         strokes.forEach(paintStroke);
     };
 
-    // Gespeicherte Raster-Zeichnung als Image-Objekt halten
+    // Keep the stored raster drawing as an Image object
     const setBaseImage = (dataURL) => {
         baseImage = dataURL;
         if (!dataURL) {
@@ -114,7 +114,7 @@
         baseImageObj.src = dataURL;
     };
 
-    // Zeichnung als kompakte JSON in das Formularfeld schreiben
+    // Write the drawing as compact JSON into the form field
     const save = () => {
         const textarea = document.getElementById('[[Whiteboard#id]]');
         if (!textarea) {
@@ -136,7 +136,7 @@
         document.getElementById('redoBtn').disabled = redoStack.length === 0;
     };
 
-    // --- Zeichnen: ein gemeinsamer Zeiger-Codepfad für Maus und Touch ---
+    // --- Drawing: one shared pointer code path for mouse and touch ---
     canvas.addEventListener('pointerdown', (e) => {
         if (e.pointerType === 'mouse' && e.button !== 0) {
             return;
@@ -148,7 +148,7 @@
             e: isEraser ? 1 : 0,
             p: [toNorm(e)]
         };
-        paintStroke(current); // Startpunkt als runder Punkt
+        paintStroke(current); // start point drawn as a round dot
     });
 
     canvas.addEventListener('pointermove', (e) => {
@@ -160,10 +160,10 @@
         const dx = p[0] - prev[0];
         const dy = p[1] - prev[1];
         if (dx * dx + dy * dy < MIN_POINT_DIST * MIN_POINT_DIST) {
-            return; // Punkt-Dünnung: zu dichte Punkte überspringen
+            return; // point thinning: skip points that are too close together
         }
         current.p.push(p);
-        paintStroke({ c: current.c, w: current.w, e: current.e, p: [prev, p] }); // nur das neue Teilstück
+        paintStroke({ c: current.c, w: current.w, e: current.e, p: [prev, p] }); // only the new segment
     });
 
     const finishStroke = () => {
@@ -179,10 +179,10 @@
 
     canvas.addEventListener('pointerup', finishStroke);
     canvas.addEventListener('pointercancel', () => {
-        current = null; // Unvollendeter Strich wird verworfen
+        current = null; // unfinished stroke is discarded
     });
 
-    // --- Werkzeuge ---
+    // --- Tools ---
     colorInput.addEventListener('input', () => {
         curColor = colorInput.value;
     });
@@ -222,14 +222,14 @@
     document.getElementById('clearButton').addEventListener('click', () => {
         strokes.length = 0;
         redoStack = [];
-        setBaseImage(null); // räumt den Untergrund auf und zeichnet neu
+        setBaseImage(null); // clears the background and redraws
         save();
         updateToolStates();
     });
 
-    // --- Vorhandene Zeichnung laden ---
-    // Im Add-Template rendert [[Whiteboard]] das Formularfeld → Wert aus dem Input lesen.
-    // In den Ansichts-Templates steht der Wert als Text → aus textContent lesen.
+    // --- Load an existing drawing ---
+    // In the add template [[Whiteboard]] renders the form field → read the value from the input.
+    // In the view templates the value is plain text → read from textContent.
     const rawDiv = document.querySelector('div.whiteboard-raw');
     let loadedRaw = '';
     if (rawDiv) {
@@ -245,7 +245,7 @@
                 setBaseImage(data.b);
             }
         } catch {
-            /* Beschädigte Daten ignorieren */
+            /* Ignore corrupt data */
         }
     } else {
         const match = loadedRaw.match(/data:image\/png;base64,[^'"\s]+/);
@@ -254,13 +254,13 @@
         }
     }
 
-    // Erst zeichnen, wenn jstemplate.js geladen ist (liefert die gemeinsame Zeichenlogik)
+    // Draw only once jstemplate.js has loaded (it provides the shared drawing logic)
     document.addEventListener('DOMContentLoaded', () => {
         redraw();
         updateToolStates();
     });
 
-    // --- Optionaler Canvas-Hintergrund (imgTemplate in jstemplate.js setzen) ---
+    // --- Optional canvas background (set imgTemplate in jstemplate.js) ---
     window.addEventListener('load', () => {
         if (typeof imgTemplate === 'undefined' || !imgTemplate) {
             return;
@@ -276,11 +276,11 @@
         bg.src = imgTemplate;
     });
 
-    // --- Kartenfarbe: Kacheln einfärben, Canvas und Formular tönen ---
+    // --- Card color: round swatches, form gets a color tint preview ---
     const radios = document.querySelectorAll('#setcolor input[type="radio"]');
 
-    // Die Text-Labels (white, yellow, pink, …) als runde Farbkacheln darstellen.
-    // Bekannte Werte bekommen den Pastellton der Karten, unbekannte den CSS-Farbnamen.
+    // The text labels (white, yellow, pink, …) are displayed as round color tiles.
+    // Known values get the pastel tone of the cards, unknown ones the CSS color name.
     const colorHex = {
         white: '#ffffff',
         yellow: '#fde047',
@@ -295,8 +295,8 @@
             return;
         }
         const value = (radio.value || '').trim().toLowerCase();
-        // Größe/Farbe direkt am Label setzen, damit Theme-CSS sie nicht überschreiben kann
-        // (gleicher Kreis-Look wie die Filter-Buttons in der Listenansicht: 26 px + feiner Rand)
+        // Set size/color directly on the label so theme CSS cannot override it
+        // (same circular look as the filter buttons in the list view: 26 px + thin border)
         label.style.display = 'inline-flex';
         label.style.boxSizing = 'border-box';
         label.style.width = '26px';
@@ -313,11 +313,11 @@
     });
 
     const applyCanvasColor = (value) => {
-        // Gleiche Pastelltöne wie auf den Karten verwenden (nicht die rohen CSS-Farbnamen)
+        // Use the same pastel tones as on the cards (not the raw CSS color names)
         const v = (value || '').trim().toLowerCase();
         const color = colorHex[v] || v || '#ffffff';
-        // Nur den Formularbereich als Vorschau der Kartenfarbe tönen;
-        // die Zeichenfläche bleibt überall weiß (wie in Listen-/Einzelansicht)
+        // Tint only the form area as a preview of the card color;
+        // the drawing surface stays white everywhere (like in list/single view)
         const form = document.querySelector('.defaulttemplate');
         if (form) {
             form.style.backgroundColor = color;
@@ -331,7 +331,7 @@
         radio.addEventListener('change', () => applyCanvasColor(radio.value));
     });
 
-    // Whiteboard-Bereich standardmäßig zuklappen
+    // Collapse the whiteboard section by default
     window.addEventListener('load', () => {
         const details = document.getElementById('whiteboarddetails');
         if (details) {

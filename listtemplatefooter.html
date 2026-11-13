@@ -1,81 +1,10 @@
 </div>
-<script>// Funktion zum Scrollen zum Anker
-function scrollToAnchor() {
-    // Nach dem Neuladen zur data-content-Ankerposition scrollen
-    document.getElementById('data-content').scrollIntoView();
-}
-
-// Eventlistener hinzufügen, um die Funktion scrollToAnchor nach dem Laden der Seite aufzurufen
-document.addEventListener('DOMContentLoaded', scrollToAnchor);
-</script>
 <script>
-window.onload = function() {
-// Wähle alle div-Elemente mit der Klasse "dataurlview" aus 
-let dataurlviews = document.querySelectorAll(".dataurlview");
-
-// Das imgtemplate-Element verwenden
-let imgBackground = new Image();
-imgBackground.onload = function() {
-  // Größe jedes dataurlview-Elements anpassen
-  dataurlviews.forEach(function(dataurlview) {
-    dataurlview.style.width = dataurlview.offsetWidth + "px";
-    dataurlview.style.height = dataurlview.offsetHeight + "px";
-
-    // Größenverhältnis des Bildes berechnen
-    let ratio = Math.min(dataurlview.offsetWidth / imgBackground.width, dataurlview.offsetHeight / imgBackground.height);
-
-    // Neue Größe des Bildes berechnen
-    let newWidth = imgBackground.width * ratio;
-    let newHeight = imgBackground.height * ratio;
-
-    // Bild als Hintergrundbild setzen
-    dataurlview.style.backgroundImage = 'url(' + imgBackground.src + ')';
-    dataurlview.style.backgroundSize = newWidth + 'px ' + newHeight + 'px';
-    dataurlview.style.backgroundRepeat = 'no-repeat';
-    dataurlview.style.backgroundPosition = 'center';
-  });
-};
-imgBackground.src = imgTemplate;
-};
-</script>
-<script>
-let whiteboardcontents = document.getElementsByClassName("whiteboardcontent");
-for (let i = 0; i < whiteboardcontents.length; i++) {
-    let whiteboardcontent = whiteboardcontents[i];
-    if (whiteboardcontent.src === "") {
-        whiteboardcontent.style.display = "none";
-    } else {
-        whiteboardcontent.style.display = "block";
+// Nach dem Neuladen zur Board-Position scrollen
+document.addEventListener('DOMContentLoaded', () => {
+    const board = document.getElementById('data-content');
+    if (board) {
+        board.scrollIntoView();
     }
-}
-</script>
-<script>
-document.addEventListener('DOMContentLoaded', function() {
-    // Abrufen des Masonry-Containers
-    var grid = document.querySelector('.board');
-    
-    // Initialisierung von Masonry
-    var msnry = new Masonry(grid);
-    imagesLoaded( grid ).on( 'progress', function() {
-  // layout Masonry after each image loads
-  msnry.layout();
-});
-    
-    // Hinzufügen eines Event-Listeners für Klicks auf Elemente mit der Klasse "comment-link"
-    document.querySelectorAll('.comment-link').forEach(function(link) {
-        link.addEventListener('click', function() {
-            // Überprüfen, ob das Masonry-Layout bereits initialisiert wurde
-            if (msnry) {
-                // Warten Sie 1 Sekunde, bevor das Layout neu angeordnet wird
-                setTimeout(function() {
-                    // Layout neu anordnen, nachdem die Höhe des Kommentarfelds geändert wurde
-                    msnry.layout();
-                }, 250); // 250 Millisekunden = 0,25 Sekunden
-            }
-        });
-    });
 });
 </script>
-
-
-

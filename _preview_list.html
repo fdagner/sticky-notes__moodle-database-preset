@@ -1,0 +1,149 @@
+﻿<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Sticky Notes – Vorschau Listenansicht</title>
+<link rel="stylesheet" href="csstemplate.css">
+<style>
+  /* Moodle-Näherung für die Vorschau */
+  body { font-family: -apple-system, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; margin: 0; padding: 24px; background: #f8f9fa; }
+  .dropdown-toggle { border: none; background: transparent; font-size: 1.1rem; cursor: pointer; padding: 2px 6px; border-radius: 6px; }
+  .dropdown-toggle:hover { background: rgba(0,0,0,.06); }
+  .userpicture { background: #93c5fd; display: inline-block; }
+  .comment-link { color: #1d4ed8; text-decoration: none; }
+</style>
+</head>
+<body>
+
+<div class="text-right d-print-none note-reload">
+  <label for="checkbox1">
+    <input type="checkbox" id="checkbox1"> <i class="fa-solid fa-rotate" aria-hidden="true"></i> Automatisch aktualisieren
+  </label>
+</div>
+
+<div class="note-filter d-print-none" role="group" aria-label="Karten nach Farbe filtern">
+  <button type="button" class="note-filter-all is-active" data-filter="">Alle</button>
+  <button type="button" class="note-filter-btn" data-filter="yellow" style="background-color:#fde047" title="Gelbe Karten" aria-label="Gelbe Karten filtern"></button>
+  <button type="button" class="note-filter-btn" data-filter="pink" style="background-color:#f9a8d4" title="Rosa Karten" aria-label="Rosa Karten filtern"></button>
+  <button type="button" class="note-filter-btn" data-filter="lightblue" style="background-color:#bfdbfe" title="Blaue Karten" aria-label="Blaue Karten filtern"></button>
+  <button type="button" class="note-filter-btn" data-filter="lightgreen" style="background-color:#bbf7d0" title="Grüne Karten" aria-label="Grüne Karten filtern"></button>
+  <button type="button" class="note-filter-btn" data-filter="white" style="background-color:#fff" title="Weiße Karten" aria-label="Weiße Karten filtern"></button>
+</div>
+
+<div class="board" id="data-content">
+
+  <div class="item">
+    <div class="karte" data-color="yellow">
+      <div class="dropdown dropleft note-actions"><button class="dropdown-toggle" type="button">⋮</button></div>
+      <div class="note-head"><img class="userpicture" src="" alt="" width="40" height="40"> <strong class="note-author">Maxi Mustermann</strong></div>
+      <div class="note-body">
+        Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua.
+        <div class="whiteboard-raw">{"v":1,"w":800,"h":400,"s":[{"c":"#dc2626","w":4,"e":0,"p":[[0.1,0.6],[0.15,0.4],[0.2,0.6],[0.25,0.4],[0.3,0.6]]},{"c":"#2563eb","w":8,"e":0,"p":[[0.4,0.5],[0.45,0.3],[0.5,0.5],[0.55,0.3],[0.6,0.5]]},{"c":"#16a34a","w":14,"e":0,"p":[[0.7,0.4],[0.75,0.55],[0.8,0.4]]}]}</div>
+        <div class="dataurlview"></div>
+      </div>
+      <div class="note-footer"><a class="comment-link" href="#">Kommentare (0)</a></div>
+    </div>
+  </div>
+
+  <div class="item">
+    <div class="karte" data-color="pink">
+      <div class="dropdown dropleft note-actions"><button class="dropdown-toggle" type="button">⋮</button></div>
+      <div class="note-head"><img class="userpicture" src="" alt="" width="40" height="40"> <strong class="note-author">Anna Musterfrau</strong></div>
+      <div class="note-body">
+        <h2>Heading</h2><p>Älterer Eintrag mit PNG-Whiteboard:</p>
+        <div class="whiteboard-raw">data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mNkYPhfDwAChwGA60e6kgAAAABJRU5ErkJggg==</div>
+        <div class="dataurlview"></div>
+      </div>
+      <div class="note-footer"><a class="comment-link" href="#">Kommentare (2)</a></div>
+    </div>
+  </div>
+
+  <div class="item">
+    <div class="karte" data-color="lightblue">
+      <div class="dropdown dropleft note-actions"><button class="dropdown-toggle" type="button">⋮</button></div>
+      <div class="note-head"><img class="userpicture" src="" alt="" width="40" height="40"> <strong class="note-author">Maxi Mustermann</strong></div>
+      <div class="note-body">
+        <div class="whiteboard-raw">{"v":1,"w":800,"h":400,"s":[{"c":"#000000","w":4,"e":0,"p":[[0.1,0.3],[0.14,0.28],[0.18,0.26],[0.22,0.24],[0.26,0.22]]},{"c":"#000000","w":4,"e":0,"p":[[0.5,0.7],[0.6,0.7],[0.7,0.7],[0.8,0.72]]},{"c":"#ea580c","w":2,"e":0,"p":[[0.3,0.8],[0.35,0.85],[0.4,0.8],[0.45,0.85]]}]}</div>
+        <div class="dataurlview"></div>
+      </div>
+      <div class="note-footer"><a class="comment-link" href="#">Kommentare (0)</a></div>
+    </div>
+  </div>
+
+  <div class="item">
+    <div class="karte" data-color="lightgreen">
+      <div class="dropdown dropleft note-actions"><button class="dropdown-toggle" type="button">⋮</button></div>
+      <div class="note-head"><img class="userpicture" src="" alt="" width="40" height="40"> <strong class="note-author">Anna Musterfrau</strong></div>
+      <div class="note-body">
+        Kurz und knapp: <strong>Super!</strong> 🎉
+        <div class="whiteboard-raw"></div>
+        <div class="dataurlview"></div>
+      </div>
+      <div class="note-footer"><a class="comment-link" href="#">Kommentare (1)</a></div>
+    </div>
+  </div>
+
+  <div class="item">
+    <div class="karte" data-color="white">
+      <div class="dropdown dropleft note-actions"><button class="dropdown-toggle" type="button">⋮</button></div>
+      <div class="note-head"><img class="userpicture" src="" alt="" width="40" height="40"> <strong class="note-author">Maxi Mustermann</strong></div>
+      <div class="note-body">
+        Hallo! 👋
+        <div class="whiteboard-raw"></div>
+        <div class="dataurlview"></div>
+      </div>
+      <div class="note-footer"><a class="comment-link" href="#">Kommentare (0)</a></div>
+    </div>
+  </div>
+
+  <div class="item">
+    <div class="karte" data-color="yellow">
+      <div class="dropdown dropleft note-actions"><button class="dropdown-toggle" type="button">⋮</button></div>
+      <div class="note-head"><img class="userpicture" src="" alt="" width="40" height="40"> <strong class="note-author">Anna Musterfrau</strong></div>
+      <div class="note-body">
+        Auf'ff i hob di liab! 🐿️<br>Noch ein etwas längerer Eintrag, damit die Spaltenhöhen unterschiedlich sind und das Masonry-artige Layout gut sichtbar wird.
+        <div class="whiteboard-raw"></div>
+        <div class="dataurlview"></div>
+      </div>
+      <div class="note-footer"><a class="comment-link" href="#">Kommentare (0)</a></div>
+    </div>
+  </div>
+
+</div>
+
+<script src="jstemplate.js"></script>
+<script>
+// Filter-Logik aus listtemplateheader.html für die Vorschau nachbilden
+var filterButtons = document.querySelectorAll('.note-filter-all, .note-filter-btn');
+filterButtons.forEach(function (btn) {
+  btn.addEventListener('click', function () {
+    var filter = btn.dataset.filter;
+    filterButtons.forEach(function (b) { b.classList.remove('is-active'); });
+    btn.classList.add('is-active');
+    document.querySelectorAll('#data-content .item').forEach(function (item) {
+      var card = item.querySelector('.karte');
+      var color = card ? (card.getAttribute('data-color') || '') : '';
+      var show = filter === '' || color.indexOf(filter) !== -1;
+      item.style.display = show ? '' : 'none';
+    });
+  });
+});
+
+// Farb-Buttons ohne zugehörige Karten ausblenden
+var available = [];
+document.querySelectorAll('#data-content .karte').forEach(function (card) {
+  var color = (card.getAttribute('data-color') || '').trim().toLowerCase();
+  if (color !== '' && available.indexOf(color) === -1) {
+    available.push(color);
+  }
+});
+filterButtons.forEach(function (btn) {
+  var filter = btn.dataset.filter;
+  if (filter !== '' && available.every(function (color) { return color.indexOf(filter) === -1; })) {
+    btn.style.display = 'none';
+  }
+});
+</script>
+</body>
+</html>

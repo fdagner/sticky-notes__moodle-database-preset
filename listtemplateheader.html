@@ -1,42 +1,147 @@
-<form></form><div class="text-right d-print-none ion-hide">
-    <label for="checkbox1" onClick="save()"><input type="checkbox" id="checkbox1"> <i class="fa-solid fa-rotate" style="vertical-align: super;"></i></input></label>
+<div class="text-right d-print-none note-reload">
+  <label for="checkbox1">
+    <input type="checkbox" id="checkbox1"> <i class="fa-solid fa-rotate" aria-hidden="true"></i> Automatisch aktualisieren
+  </label>
 </div>
-<script>
-    // Run once per session.
-    if ((typeof sessionStorage !== 'undefined') &&
-        (sessionStorage.getItem('ChangeEntriesReload') === null)) {
 
-        // Set url for 1000 entries per site.
-        const params = new URLSearchParams(location.search);
-        params.set('perpage', 1000);
-        window.history.replaceState({}, '', `${location.pathname}?${params}`);
-        // Reload page.
-        window.location.reload();
-
-        console.log('ok');
-
-        sessionStorage.setItem('ChangeEntriesReload', true);
-    }
-</script>
+<div class="note-filter d-print-none" role="group" aria-label="Karten nach Farbe filtern">
+  <button type="button" class="note-filter-all is-active" data-filter="">Alle</button>
+  <button type="button" class="note-filter-btn" data-filter="yellow" style="background-color:#fde047" title="Gelbe Karten" aria-label="Gelbe Karten filtern"></button>
+  <button type="button" class="note-filter-btn" data-filter="pink" style="background-color:#f9a8d4" title="Rosa Karten" aria-label="Rosa Karten filtern"></button>
+  <button type="button" class="note-filter-btn" data-filter="lightblue" style="background-color:#bfdbfe" title="Blaue Karten" aria-label="Blaue Karten filtern"></button>
+  <button type="button" class="note-filter-btn" data-filter="lightgreen" style="background-color:#bbf7d0" title="Grüne Karten" aria-label="Grüne Karten filtern"></button>
+  <button type="button" class="note-filter-btn" data-filter="white" style="background-color:#fff" title="Weiße Karten" aria-label="Weiße Karten filtern"></button>
+</div>
 
 <script>
-    // Save status of checkbox.
-    function save() {
-        var checkbox = document.getElementById("checkbox1");
-        localStorage.setItem("checkbox1", checkbox.checked);
-        location.reload();
-    }
-    // Get status of checkbox.
-    var checked = JSON.parse(localStorage.getItem("checkbox1"));
-    document.getElementById("checkbox1").checked = checked;
-    // Reload if checkbox is checked.
-    if (checkbox1.checked == true) {
-        // Reload single div every 4 sec.
-        setInterval(function () {
- location.reload();
-        }, 4000);
-    }
+(() => {
+    'use strict';
+
+    const checkbox = document.getElementById('checkbox1');
+    let timer = null;
+
+    const readStored = () => {
+        try {
+            return localStorage.getItem('checkbox1') === 'true';
+        } catch {
+            return false; // Speicher nicht verfügbar (z. B. privater Modus)
+        }
+    };
+
+    const writeStored = (value) => {
+        try {
+            localStorage.setItem('checkbox1', JSON.stringify(value));
+        } catch { /* Speicher nicht verfügbar */ }
+    };
+
+    checkbox.checked = readStored();
+
+    // --- Schnellfilter nach Kartenfarbe ---
+    // Wird beim ersten Laden und nach jedem Inhalts-Refresh neu ausgeführt,
+    // damit die Filter-Buttons zu den aktuellen Karten passen.
+    const applyFilter = () => {
+        const filterButtons = document.querySelectorAll('.note-filter-all, .note-filter-btn');
+
+        // Farb-Buttons ohne zugehörige Karten ausblenden
+        const available = [];
+        document.querySelectorAll('#data-content .karte').forEach((card) => {
+            const color = (card.getAttribute('data-color') || '').trim().toLowerCase();
+            if (color !== '' && !available.includes(color)) {
+                available.push(color);
+            }
+        });
+        filterButtons.forEach((btn) => {
+            const filter = btn.dataset.filter;
+            if (filter !== '' && !available.some((color) => color.includes(filter))) {
+                btn.style.display = 'none';
+            }
+        });
+
+        // Aktiven Filter erneut anwenden (steht nach dem Refresh sonst auf keiner Karte)
+        const active = document.querySelector('.note-filter-all.is-active, .note-filter-btn.is-active');
+        const filter = active ? active.dataset.filter : '';
+        document.querySelectorAll('#data-content .item').forEach((item) => {
+            const card = item.querySelector('.karte');
+            const color = card ? (card.getAttribute('data-color') || '') : '';
+            const show = filter === '' || color.includes(filter);
+            item.style.display = show ? '' : 'none';
+        });
+    };
+
+    const bindFilterButtons = () => {
+        document.querySelectorAll('.note-filter-all, .note-filter-btn').forEach((btn) => {
+            btn.addEventListener('click', () => {
+                const filter = btn.dataset.filter;
+                document.querySelectorAll('.note-filter-all, .note-filter-btn').forEach((b) => b.classList.remove('is-active'));
+                btn.classList.add('is-active');
+                document.querySelectorAll('#data-content .item').forEach((item) => {
+                    const card = item.querySelector('.karte');
+                    const color = card ? (card.getAttribute('data-color') || '') : '';
+                    const show = filter === '' || color.includes(filter);
+                    item.style.display = show ? '' : 'none';
+                });
+            });
+        });
+    };
+
+    // --- Auto-Aktualisierung ohne Seitenneuladen ---
+    // Holt die Seite per fetch, parst sie und tauscht NUR den Karten-Inhalt aus.
+    // Kein location.reload() → kein Flackern, Scroll-Position bleibt erhalten.
+    // 15 s Intervall und nur bei sichtbarem Tab, um den Server zu schonen:
+    // Im Hintergrund liegende Tabs aktualisieren erst beim nächsten Tick nach der Rückkehr.
+    const refreshContent = () => {
+        if (document.hidden) {
+            return;
+        }
+        fetch(location.href, { credentials: 'same-origin' })
+            .then((response) => response.text())
+            .then((html) => {
+                const next = new DOMParser().parseFromString(html, 'text/html').getElementById('data-content');
+                const board = document.getElementById('data-content');
+                if (next && board && next.innerHTML !== board.innerHTML) {
+                    board.innerHTML = next.innerHTML;
+                    // Whiteboard-Zeichnungen der neuen Karten rendern
+                    if (window.StickyBoard && window.StickyBoard.renderAll) {
+                        window.StickyBoard.renderAll();
+                    }
+                    // Filter-Buttons und aktive Filterung an die neuen Karten anpassen
+                    applyFilter();
+                }
+            })
+            .catch(() => { /* Netzwerkfehler: der nächste Tick versucht es erneut */ });
+    };
+
+    const applyAutoReload = () => {
+        writeStored(checkbox.checked);
+        if (checkbox.checked && timer === null) {
+            timer = setInterval(refreshContent, 15000);
+        } else if (!checkbox.checked && timer !== null) {
+            clearInterval(timer);
+            timer = null;
+        }
+    };
+
+    checkbox.addEventListener('change', applyAutoReload);
+    applyAutoReload();
+
+    // 1000 Einträge pro Seite – einmal pro Sitzung setzen
+    try {
+        if (sessionStorage.getItem('ChangeEntriesReload') === null) {
+            sessionStorage.setItem('ChangeEntriesReload', 'true');
+            const params = new URLSearchParams(location.search);
+            if (params.get('perpage') !== '1000') {
+                params.set('perpage', '1000');
+                location.href = location.pathname + '?' + params.toString();
+            }
+        }
+    } catch { /* Speicher nicht verfügbar – Einstellung dann überspringen */ }
+
+    // Erst bei DOMContentLoaded: die Karten stehen im HTML NACH diesem Skript
+    document.addEventListener('DOMContentLoaded', () => {
+        bindFilterButtons();
+        applyFilter();
+    });
+})();
 </script>
 
-
-<div class="board" id="data-content" data-masonry='{"percentPosition": true }'>
+<div class="board" id="data-content">

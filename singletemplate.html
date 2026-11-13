@@ -1,57 +1,40 @@
-<div>
-  <div class="karte2" style="margin: 0px auto;background-color: [[Color]]">
- <div class="dropdown dropleft" style="float:right">
-       ##actionsmenu##
-      </div>
-    ##userpicture##
-    <span class="" style="font-size: small"><strong>##user## </strong></span>
-    <div>
-      <br><span style="font-family: 'Trebuchet MS', Helvetica, sans-serif"></span>[[Note]]<br>
-      <div class="dataurlview" id="dataurlview">
-        <img id="whiteboardcontent" src="[[Whiteboard]]" />
-      </div>
- <hr id="null">##comments##
-      </div>
+<div class="note-single">
+  <div class="karte2" data-color="[[Color]]">
+    <div class="dropdown dropleft note-actions">
+      ##actionsmenu##
+    </div>
+    <div class="note-head">
+      ##userpicture## <strong class="note-author">##user##</strong>
+    </div>
+    <div class="note-body">
+      [[Note]]
+      <div class="whiteboard-raw">[[Whiteboard]]</div>
+      <div class="dataurlview" id="dataurlview"></div>
+    </div>
+    <div class="note-footer">
+      ##comments##
+    </div>
+  </div>
 </div>
 <script>
-  window.onload = function () {
-    // Wähle alle div-Elemente mit der Klasse "dataurlview" aus
-    let dataurlviews = document.querySelectorAll(".dataurlview");
-
-    // Das imgtemplate-Element verwenden
-    let imgBackground = new Image();
-    imgBackground.onload = function () {
-      // Größe jedes dataurlview-Elements anpassen
-      dataurlviews.forEach(function (dataurlview) {
-        dataurlview.style.width = dataurlview.offsetWidth + "px";
-        dataurlview.style.height = dataurlview.offsetHeight + "px";
-
-        // Größenverhältnis des Bildes berechnen
-        let ratio = Math.min(
-          dataurlview.offsetWidth / imgBackground.width,
-          dataurlview.offsetHeight / imgBackground.height
-        );
-
-        // Neue Größe des Bildes berechnen
-        let newWidth = imgBackground.width * ratio;
-        let newHeight = imgBackground.height * ratio;
-
-        // Bild als Hintergrundbild setzen
-        dataurlview.style.backgroundImage = "url(" + imgBackground.src + ")";
-        dataurlview.style.backgroundSize = newWidth + "px " + newHeight + "px";
-        dataurlview.style.backgroundRepeat = "no-repeat";
-        dataurlview.style.backgroundPosition = "center";
-      });
+  // Optionaler Hintergrund für die Whiteboard-Vorschau (imgTemplate in jstemplate.js setzen)
+  window.addEventListener('load', () => {
+    if (typeof imgTemplate === 'undefined' || !imgTemplate) {
+      return;
+    }
+    const view = document.getElementById('dataurlview');
+    const canvas = view ? view.querySelector('canvas') : null;
+    if (!canvas) {
+      return;
+    }
+    const bg = new Image();
+    bg.onload = () => {
+      const ratio = Math.min(canvas.width / bg.width, canvas.height / bg.height);
+      canvas.style.backgroundImage = `url(${bg.src})`;
+      canvas.style.backgroundSize = `${bg.width * ratio}px ${bg.height * ratio}px`;
+      canvas.style.backgroundRepeat = 'no-repeat';
+      canvas.style.backgroundPosition = 'center';
     };
-    imgBackground.src = imgTemplate;
-  };
-</script>
-
-<script>
-  let whiteboardcontent = document.getElementById("whiteboardcontent");
-  if (whiteboardcontent.src === "") {
-    whiteboardcontent.style.display = "none";
-  } else {
-    whiteboardcontent.style.display = "block";
-  }
+    bg.src = imgTemplate;
+  });
 </script>

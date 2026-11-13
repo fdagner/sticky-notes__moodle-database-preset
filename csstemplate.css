@@ -1,43 +1,209 @@
 /*
- * Datenbankvorlage Kartenabfrage
+ * Datenbankvorlage Sticky Notes
  * @Autor 2021 Florian Dagner
-* Drog.js v1.2.1
- * [Back-compatibility: IE11+]
- * Copyright (c) 2021, Emanuel Rojas Vásquez
- * BSD 3-Clause License
- * https://github.com/erovas/Drog.js
+ *
+ * Modernisiertes Layout – reines CSS.
+ * Das Board-Layout läuft über CSS-Spalten, Masonry/imagesLoaded werden nicht mehr benötigt.
+ * Die Kartenfarbe steuert das Datenbankfeld "Color" über das Attribut data-color.
  */
 
- .board {
-  display: flex;
-  flex-wrap: wrap;
+:root {
+  --sn-ink: #1f2937; /* Textfarbe auf den Karten (bleibt in Dark-Modes lesbar) */
+  --sn-radius: 10px;
+  --sn-shadow: 0 1px 2px rgba(15, 23, 42, .10), 0 8px 20px rgba(15, 23, 42, .12);
+  --sn-shadow-hover: 0 2px 4px rgba(15, 23, 42, .12), 0 16px 32px rgba(15, 23, 42, .18);
 }
 
-.table {
-max-width: 1200px;
-}
+/* ---------- Board-Layout: CSS-Spalten statt Masonry ---------- */
 
-[data-drog] {
-  cursor: move;
-  min-height: 50px;
+.board {
+  columns: 280px;
+  column-gap: 24px;
 }
 
 .item {
+  break-inside: avoid;
+  -webkit-column-break-inside: avoid;
+  margin: 0 0 24px;
 }
 
-#setcolor fieldset {
-display: flex;
-flex-direction: row;
-gap: 4px;
+/* ---------- Karte ---------- */
+
+.karte,
+.karte2 {
+  position: relative;
+  overflow: hidden;
+  color: var(--sn-ink);
+  background-color: #fff;
+  border-radius: var(--sn-radius);
+  box-shadow: var(--sn-shadow);
+  padding: 14px;
+  transition: box-shadow .2s ease, transform .2s ease;
 }
 
-.userpicture, .userinitials.size-64 {
-width: 50px;
-height: 50px;
+.karte2 {
+  max-width: 810px;
+  margin: 0 auto 24px;
 }
 
-.karte img {
-  max-width: 270px;
+/* Kartenfarben aus dem Datenbankfeld (Werte: white, yellow, pink, lightblue, lightgreen) */
+.karte[data-color*="yellow"], .karte2[data-color*="yellow"]       { background-color: #fde047; }
+.karte[data-color*="pink"], .karte2[data-color*="pink"]          { background-color: #f9a8d4; }
+.karte[data-color*="lightblue"], .karte2[data-color*="lightblue"]   { background-color: #bfdbfe; }
+.karte[data-color*="lightgreen"], .karte2[data-color*="lightgreen"] { background-color: #bbf7d0; }
+
+/* Leichte, abwechselnde Drehung für den Sticky-Look */
+.item:nth-child(odd) .karte  { transform: rotate(-.5deg); }
+.item:nth-child(even) .karte { transform: rotate(.4deg); }
+.item:hover .karte {
+  transform: rotate(0) scale(1.02);
+  box-shadow: var(--sn-shadow-hover);
+}
+
+/* Gefaltete Ecke unten rechts */
+.karte::after,
+.karte2::after {
+  content: "";
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  width: 26px;
+  height: 26px;
+  background: linear-gradient(315deg, rgba(15, 23, 42, .14) 50%, transparent 50%);
+  border-bottom-right-radius: var(--sn-radius);
+  pointer-events: none;
+}
+
+/* Kopf- und Fußbereich der Karte */
+.note-head {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 8px;
+}
+
+.note-author {
+  font-size: .85rem;
+}
+
+.note-actions {
+  position: absolute;
+  top: 6px;
+  right: 6px;
+}
+
+.note-body {
+  font-size: .95rem;
+  line-height: 1.5;
+  overflow-wrap: break-word;
+}
+
+.note-footer {
+  margin-top: 8px;
+  padding-top: 6px;
+  border-top: 1px solid rgba(15, 23, 42, .15);
+  font-size: .8rem;
+  text-align: right;
+}
+
+/* Profilbilder rund statt eckig – bewusst mit !important, damit Theme-Regeln
+   (die .userpicture teils eckig formatieren) nicht dazwischenfunken.
+   userpicturecontainer: Moodle 4 packt das img in einen Wrapper-A/span-Container. */
+.note-head .userpicture,
+.note-head .userpicture img,
+.note-head .userpicturecontainer,
+.note-single .userpicture,
+.note-single .userpicture img,
+.note-single .userpicturecontainer {
+  border-radius: 50% !important;
+}
+
+.note-head .userpicturecontainer,
+.note-single .userpicturecontainer {
+  overflow: hidden; /* Wrapper cropt sonst das img wieder eckig */
+}
+
+.userpicture,
+.userinitials.size-64 {
+  width: 40px;
+  height: 40px;
+  flex-shrink: 0;
+}
+
+/* Bilder und Videos in den Karten (Profilbilder ausgeschlossen – die bleiben rund) */
+.karte img:not(.userpicture),
+.karte2 img:not(.userpicture) {
+  max-width: 100%;
+  border-radius: 6px;
+}
+
+.dataurlview img {
+  border: 1px solid rgba(15, 23, 42, .2);
+  background-color: #fff; /* Transparente Legacy-PNGs vor weißer Fläche statt Kartenfarbe */
+}
+
+.dataurlview {
+  max-width: 100%;
+  margin-top: 8px;
+  background-size: 100% auto;
+}
+
+.dataurlview canvas {
+  max-width: 100%;
+  height: auto;
+  border-radius: 6px;
+}
+
+/* ---------- Schnellfilter nach Kartenfarbe ---------- */
+
+.note-filter {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 16px;
+}
+
+.note-filter-all {
+  padding: 4px 12px;
+  border: 1px solid rgba(15, 23, 42, .25);
+  border-radius: 999px;
+  background-color: #fff;
+  color: var(--sn-ink);
+  font-size: .85rem;
+  cursor: pointer;
+}
+
+.note-filter-all.is-active {
+  background-color: #1f2937;
+  border-color: #1f2937;
+  color: #fff;
+}
+
+.note-filter-btn {
+  width: 26px;
+  height: 26px;
+  padding: 0;
+  border: 1px solid rgba(15, 23, 42, .25);
+  border-radius: 50%;
+  cursor: pointer;
+  transition: transform .15s ease;
+}
+
+.note-filter-btn:hover {
+  transform: scale(1.15);
+}
+
+.note-filter-btn.is-active {
+  box-shadow: 0 0 0 3px rgba(31, 41, 55, .35);
+}
+
+/* Bewertungen ("Likes") von Moodle optisch an die Karten anpassen.
+   Aktivierbar in den Datenbank-Einstellungen unter "Bewertungen". */
+.item .rating,
+.note-single .rating {
+  margin-top: 4px;
+  font-size: .8rem;
+  color: var(--sn-ink);
 }
 
 audio,
@@ -45,58 +211,183 @@ video {
   max-width: 99%;
 }
 
-.karte2 img {
-  max-width: 800px;
-}
-
-.karte {
-  box-shadow: silver 4px 4px 4px;
-  width: 276px;
-  margin-right: 25px;
-  margin-bottom: 25px;
-  padding: 4px;
-  -webkit-column-break-inside: avoid;
-  -moz-column-break-inside: avoid;
-  column-break-inside: avoid;
-  background-color: #fff;
-  border-radius: 10px 10px 10px 10px;
-}
-
-.karte2 {
-  box-shadow: silver 4px 4px 4px;
-  width: 810px;
-  margin-right: 25px;
-  margin-bottom: 25px;
-  padding: 4px;
-  -webkit-column-break-inside: avoid;
-  -moz-column-break-inside: avoid;
-  column-break-inside: avoid;
-  border-radius: 10px 10px 10px 10px;
-}
-
-
 .comment-list,
 .comment-ctrl {
-  font-size: 0.8rem;
+  font-size: .8rem;
 }
 
-.hidden {
+/* ---------- Formular / Whiteboard ---------- */
+
+.table {
+  max-width: 1200px;
+}
+
+/* Farb-Auswahl im Eintragsformular: Radio-Buttons als farbige Kacheln */
+#setcolor fieldset {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+  width: 100%;
+  border: none;
+  padding: 0;
+  margin: 0;
+}
+
+/* Zeilenumbrüche des Radiobutton-Felds im Flex-Layout ausblenden */
+#setcolor br {
   display: none;
 }
 
+/* Radio unsichtbar, aber fokussierbar (Tastaturbedienung bleibt erhalten) */
+#setcolor input[type="radio"] {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  opacity: 0;
+  margin: 0;
+}
+
+/* Das Label wird zur Farb-Kachel; der Text bleibt für Screenreader erhalten */
+#setcolor fieldset input[type="radio"] + label {
+  flex: 0 0 auto;
+  box-sizing: border-box;
+  width: 38px;
+  min-width: 38px;
+  height: 38px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  border: 2px solid rgba(15, 23, 42, .25);
+  border-radius: 50%;
+  font-size: 0;
+  cursor: pointer;
+  transition: transform .15s ease, box-shadow .15s ease;
+}
+
+#setcolor fieldset input[type="radio"] + label:hover {
+  transform: scale(1.08);
+}
+
+#setcolor fieldset input[type="radio"]:focus-visible + label {
+  outline: 3px solid #1d4ed8;
+  outline-offset: 2px;
+}
+
+#setcolor fieldset input[type="radio"]:checked + label {
+  border-color: #1f2937;
+  box-shadow: 0 0 0 3px rgba(31, 41, 55, .3);
+}
+
+.board-toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: .75rem;
+  margin: .5rem 0;
+}
+
+.board-toolbar label {
+  display: inline-flex;
+  align-items: center;
+  gap: .35rem;
+  margin: 0;
+}
+
+/* Farbwähler und Strichstärken-Dropdown */
+.board-toolbar input[type="color"] {
+  width: 38px;
+  height: 34px;
+  padding: 2px;
+  border: 1px solid rgba(15, 23, 42, .25);
+  border-radius: 8px;
+  background-color: #fff;
+  cursor: pointer;
+}
+
+.width-select-label {
+  color: var(--sn-ink);
+  font-size: .9rem;
+}
+
+.board-toolbar select {
+  padding: 5px 8px;
+  border: 1px solid rgba(15, 23, 42, .25);
+  border-radius: 8px;
+  background-color: #fff;
+  color: var(--sn-ink);
+  font-size: .85rem;
+  cursor: pointer;
+}
+
+.board-toolbar select:hover {
+  background-color: rgba(15, 23, 42, .06);
+}
+
+/* Werkzeug-Buttons (Radierer, Undo, Redo, Löschen) */
+.tool-btn {
+  width: 34px;
+  height: 34px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  border: 1px solid rgba(15, 23, 42, .25);
+  border-radius: 8px;
+  background-color: #fff;
+  color: var(--sn-ink);
+  cursor: pointer;
+}
+
+.tool-btn:hover {
+  background-color: rgba(15, 23, 42, .06);
+}
+
+.tool-btn.is-active {
+  background-color: #1d4ed8;
+  border-color: #1d4ed8;
+  color: #fff;
+}
+
+.tool-btn:disabled {
+  opacity: .4;
+  cursor: not-allowed;
+}
+
+/* Tastaturfokus deutlich markieren (Barrierefreiheit) */
+.board-toolbar input[type="color"]:focus-visible,
+.board-toolbar select:focus-visible,
+.tool-btn:focus-visible,
+.note-filter-all:focus-visible,
+.note-filter-btn:focus-visible {
+  outline: 3px solid #1d4ed8;
+  outline-offset: 2px;
+}
+
+/* Optionales Hintergrundbild-Feld bleibt unsichtbar */
+.whiteboard-raw {
+  display: none;
+}
+
+/* Canvas: reagiert auf die Bildschirmbreite, Zeichenkoordinaten werden in JS gemappt */
 canvas {
-  border: 1px solid black;
+  width: 100%;
+  max-width: 800px;
+  height: auto;
+  display: block;
+  border: 1px solid rgba(15, 23, 42, .25);
+  border-radius: 8px;
+  background-color: #fff;
+  touch-action: none;
 }
 
-.dataurlview {
-  max-width: 100%;
-  background-size: 100% auto;
-}
-
-
-/* Style für Druck  */
+/* ---------- Style für Druck ---------- */
 @media print {
-  /* Not displayed in print version. */
+  /* Nicht mitdrucken: Moodle-Chrome, Werkzeuge und Bedienelemente.
+     Wichtig: .container/.row werden bewusst NICHT versteckt – sie umschließen
+     in den meisten Themes den gesamten Inhalt, die Karten wären sonst leer. */
   #page-header,
   #page-footer,
   .intro,
@@ -110,7 +401,6 @@ canvas {
   .activity-navigation,
   .activity-information,
   .fixed-top,
-  .container,
   .mbsmenubar,
   .top-bar,
   #me-wrapper,
@@ -118,8 +408,20 @@ canvas {
   #mbsmenubar,
   #mebis-footer,
   #menu-sidebar-menu,
-  .row {
+  .note-reload,
+  .note-actions,
+  .note-filter,
+  .board-toolbar {
     display: none;
     background: none;
+  }
+
+  /* Kartenfarben beim Drucken erhalten und ohne Schatten drucken */
+  .karte,
+  .karte2 {
+    box-shadow: none;
+    border: 1px solid rgba(15, 23, 42, .25);
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
   }
 }

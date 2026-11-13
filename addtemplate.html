@@ -1,362 +1,342 @@
 <div class="defaulttemplate">
   <table class="table">
     <tbody>
-     </tr>
       <tr class="lastrow">
-        <th class="alert-secondary"><i class="fa-solid fa-brush"></i> </td>
+        <th class="alert-secondary" scope="row"><i class="fa-solid fa-brush" aria-hidden="true"></i></th>
         <td id="setcolor">[[Color]]</td>
       </tr>
       <tr>
-        <th class="alert-secondary"><i class="fa-solid fa-lightbulb"></i> </td>
+        <th class="alert-secondary" scope="row"><i class="fa-solid fa-lightbulb" aria-hidden="true"></i></th>
         <td>[[Note]]</td>
       </tr>
       <tr>
-        <th class="alert-secondary"><i class="fa-solid fa-pencil"></i> </td>
+        <th class="alert-secondary" scope="row"><i class="fa-solid fa-pencil" aria-hidden="true"></i></th>
         <td>
-<details open><summary class="btn btn-secondary">Whiteboard</summary><hr>
-<div style="width:780px;padding: 4px">
-<i class="fa fa-pencil"></i> <select id="selWidth">
-<option value="1">1</option> <option value="2">2</option> <option value="3">3</option> <option value="4" selected="selected">4</option> <option value="5">5</option> <option value="6">6</option> <option value="8">8</option> <option value="10">10</option> <option value="12">12</option> <option value="14">14</option> <option value="16">16</option> <option value="18">18</option> <option value="20">20</option> </select>
-<i style="margin-left: 10px" class="fa fa-paint-brush"></i> <input type="color" id="selColor" name="selColor" style="vertical-align: middle">
-<script>
-// Farbe aus ColorPicker auslesen
-var theInput = document.getElementById("selColor");
-var theColor = theInput.value;
-theInput.addEventListener("input", function() {
-// Farbcode (Hex) schreiben
-document.getElementById("selColor").value = theInput.value;
-}, false);
-</script>
-<label style="margin-left: 10px"> <i class="fa fa-eraser"></i> <input class="btn" type="checkbox" id="eraserCheckbox"></label>
-</div>
-<canvas id="canvas" width="800" height="400">Your browser does not support the HTML canvas tag.</canvas><br>
-<button type="button" class="btn btn-secondary" onclick="javascript:clearArea();clearAreaText();return false;"><i class="fa-solid fa-trash"></i></button>
-<script>function clearAreaText() {
-  var textarea = document.getElementById("[[Whiteboard#id]]");
-  textarea.value = "";
-}</script>
-</details>
-</td>
- </tr>    </tbody>
+          <details id="whiteboarddetails" open>
+            <summary class="btn btn-secondary">Whiteboard</summary>
+            <div class="board-toolbar" role="toolbar" aria-label="Zeichenwerkzeuge">
+              <input type="color" id="selColor" value="#000000" title="Stiftfarbe wählen" aria-label="Stiftfarbe wählen">
+              <label class="width-select-label" for="selWidth">
+                <i class="fa-solid fa-pen-nib" aria-hidden="true"></i>
+                <select id="selWidth" title="Strichstärke wählen" aria-label="Strichstärke wählen">
+                  <option value="2">2</option>
+                  <option value="4" selected>4</option>
+                  <option value="6">6</option>
+                  <option value="8">8</option>
+                  <option value="10">10</option>
+                  <option value="12">12</option>
+                  <option value="14">14</option>
+                </select>
+              </label>
+              <button type="button" id="eraserBtn" class="tool-btn" aria-pressed="false" title="Radierer" aria-label="Radierer">
+                <i class="fa-solid fa-eraser" aria-hidden="true"></i>
+              </button>
+              <button type="button" id="undoBtn" class="tool-btn" title="Rückgängig" aria-label="Rückgängig">
+                <i class="fa-solid fa-rotate-left" aria-hidden="true"></i>
+              </button>
+              <button type="button" id="redoBtn" class="tool-btn" title="Wiederholen" aria-label="Wiederholen">
+                <i class="fa-solid fa-rotate-right" aria-hidden="true"></i>
+              </button>
+              <button type="button" id="clearButton" class="tool-btn" title="Alles löschen" aria-label="Alles löschen">
+                <i class="fa-solid fa-trash" aria-hidden="true"></i>
+              </button>
+            </div>
+            <canvas id="canvas" width="800" height="400" role="img" aria-label="Zeichenfläche Whiteboard">Ihr Browser unterstützt kein HTML-Canvas.</canvas>
+          </details>
+        </td>
+      </tr>
+    </tbody>
   </table>
-
-  <div class="collapse" id="collapseEins">
-    <table class="mod-data-default-template ##approvalstatusclass##">
-      <tbody>
-        <tr class="">
-          <td><i class="fa-solid fa-down-left-and-up-right-to-center"></i>&nbsp;</td>
-          <td>&nbsp;</td>
-        </tr>
-      </tbody>
-    </table>
-  </div>
-</div>
-<br>
-<div class="hidden">
-  <label for=""><span class="accesshide">ID</span></label>
-  <input class="basefieldinput form-control d-inline mod-data-input" type="text" name="" id=""
-    value="">
-</div>
-<script>
-  let idnummer = Date.now() + Math.random();
-  document.getElementById("").value = idnummer;
-</script>
-
-<div class="dataurl" style="display:none">
-[[Whiteboard]]
 </div>
 
-<script>
-// Das imgtemplate-Element verwenden
-var imgBackground2 = new Image();
-imgBackground2.onload = function() {
-  // Canvas-Größe an die Größe des Bildes anpassen
-  canvas.width = canvas.offsetWidth;
-  canvas.height = canvas.offsetHeight;
-
-  // Größenverhältnis des Bildes berechnen
-  var ratio = Math.min(canvas.width / imgBackground2.width, canvas.height / imgBackground2.height);
-
-  // Neue Größe des Bildes berechnen
-  var newWidth = imgBackground2.width * ratio;
-  var newHeight = imgBackground2.height * ratio;
-
-  // Bild als Hintergrundbild für das Canvas
-  canvas.style.backgroundImage = 'url(' + imgBackground2.src + ')';
-  canvas.style.backgroundSize = newWidth + 'px ' + newHeight + 'px';
-  canvas.style.backgroundRepeat = 'no-repeat';
-
-  // Hintergrundbild zentrieren
-  canvas.style.backgroundPosition = 'center';
-};
-imgBackground2.src = imgTemplate;
-</script>
-<script>
-// Seite nach Data-URLs durchsuchen
-var divElement = document.querySelector('div.dataurl');
-var dataURLs = divElement.innerHTML.match(/data:image\/png;base64,[^'"]+/g);
-
-// Wenn eine Data-URL gefunden wurde, diese in das Canvas-Element laden
-if (dataURLs && dataURLs.length > 0) {
-  var img = new Image();
-  img.onload = function() {
-    context.drawImage(img, 0, 0);
-  };
-  img.src = dataURLs[0];
-} else if (divElement.textContent.includes("data:image")) {
-  // Wenn das dataurl-Element keinen img-Tag enthält, aber einen Textinhalt mit Data-URL enthält
-  var img = new Image();
-  img.onload = function() {
-    context.drawImage(img, 0, 0);
-  };
-  img.src = divElement.textContent.match(/data:image\/png;base64,[^'"]+/g)[0];
-};
-</script> 
+<div class="whiteboard-raw">[[Whiteboard]]</div>
 
 <script>
-const canvas = document.getElementById('canvas');
-const context = canvas.getContext('2d');
-let isDrawing = false;
-let x = 0;
-let y = 0;
-var offsetX;
-var offsetY;
-var isEraser = false;
+(() => {
+    'use strict';
 
-function startup() {
-  canvas.addEventListener('touchstart', handleStart);
-  canvas.addEventListener('touchend', handleEnd);
-  canvas.addEventListener('touchcancel', handleCancel);
-  canvas.addEventListener('touchmove', handleMove);
-  canvas.addEventListener('mousedown', (e) => {
-    x = e.offsetX;
-    y = e.offsetY;
-    isDrawing = true;
-  });
-  canvas.addEventListener('mousemove', (e) => {
-    if (isDrawing) {
-      if (isEraser) {
-        eraseLine(context, x, y, e.offsetX, e.offsetY);
-      } else {
-        drawLine(context, x, y, e.offsetX, e.offsetY);
-      }
-      x = e.offsetX;
-      y = e.offsetY;
-    }
-  });
-  canvas.addEventListener('mouseup', (e) => {
-    if (isDrawing) {
-      if (isEraser) {
-        eraseLine(context, x, y, e.offsetX, e.offsetY);
-      } else {
-        drawLine(context, x, y, e.offsetX, e.offsetY);
-      }
-      x = 0;
-      y = 0;
-      isDrawing = false;
-    }
-  });
-  document.getElementById('eraserCheckbox').addEventListener('change', (e) => {
-    isEraser = e.target.checked;
-  });
-}
+    const canvas = document.getElementById('canvas');
+    const context = canvas.getContext('2d');
+    const colorInput = document.getElementById('selColor');
 
-document.addEventListener("DOMContentLoaded", startup);
+    const strokes = [];      // Gespeicherte Striche (JSON-Format)
+    let redoStack = [];      // Für "Wiederholen"
+    let baseImage = null;    // Ältere Raster-Zeichnung (PNG-Data-URL), dient als Untergrund
+    let baseImageObj = null;
+    let current = null;      // Strich, der gerade gezeichnet wird
+    let curColor = '#000000';
+    let curWidth = 4;
+    let isEraser = false;
 
-const ongoingTouches = [];
+    // Mindestabstand zwischen gespeicherten Punkten (normalisierte Koordinaten).
+    // Verhindert, dass große Zeichnungen das TEXT-Feldlimit sprengen (~64 KB),
+    // und macht die Einträge kleiner – ohne sichtbar ruckelige Linien.
+    const MIN_POINT_DIST = 0.002;
 
-function handleStart(evt) {
-  evt.preventDefault();
-  const touches = evt.changedTouches;
-  offsetX = canvas.getBoundingClientRect().left;
-  offsetY = canvas.getBoundingClientRect().top;
-  for (let i = 0; i < touches.length; i++) {
-    ongoingTouches.push(copyTouch(touches[i]));
-  }
-}
+    // Zeigerposition als normalisierte Koordinate [0..1] relativ zur Zeichenfläche
+    const toNorm = (e) => {
+        const rect = canvas.getBoundingClientRect();
+        const x = Math.min(Math.max((e.clientX - rect.left) / rect.width, 0), 1);
+        const y = Math.min(Math.max((e.clientY - rect.top) / rect.height, 0), 1);
+        return [Math.round(x * 1000) / 1000, Math.round(y * 1000) / 1000];
+    };
 
-function handleMove(evt) {
-    evt.preventDefault();
-    const touches = evt.changedTouches;
-    for (let i = 0; i < touches.length; i++) {
-      const color = document.getElementById('selColor').value;
-      const idx = ongoingTouchIndexById(touches[i].identifier);
-      if (idx >= 0) {
-        context.beginPath();
-        context.moveTo(ongoingTouches[idx].clientX - offsetX, ongoingTouches[idx].clientY - offsetY);
-        context.lineTo(touches[i].clientX - offsetX, touches[i].clientY - offsetY);
-        context.lineWidth = document.getElementById('selWidth').value;
-        context.strokeStyle = color;
-        context.lineJoin = "round";
-        context.closePath();
-        if (isEraser) {
-          context.globalCompositeOperation = "destination-out";
-context.lineWidth = document.getElementById('selWidth').value +4;
-        } else {
-          context.globalCompositeOperation = "source-over";
+    // Gemeinsame Strich-Zeichenlogik aus jstemplate.js (window.StickyBoard.drawStroke)
+    const paintStroke = (stroke) => {
+        if (!window.StickyBoard) {
+            return;
         }
-        context.stroke();
-        ongoingTouches.splice(idx, 1, copyTouch(touches[i])); // swap in the new touch record
-      }
+        window.StickyBoard.drawStroke(context, stroke, canvas.width, canvas.height, canvas.width / 800);
+    };
+
+    // Alle Striche neu zeichnen (nach Undo/Redo/Laden)
+    const redraw = () => {
+        if (!window.StickyBoard) {
+            return;
+        }
+        context.clearRect(0, 0, canvas.width, canvas.height);
+        if (baseImageObj) {
+            context.drawImage(baseImageObj, 0, 0, canvas.width, canvas.height);
+        }
+        strokes.forEach(paintStroke);
+    };
+
+    // Gespeicherte Raster-Zeichnung als Image-Objekt halten
+    const setBaseImage = (dataURL) => {
+        baseImage = dataURL;
+        if (!dataURL) {
+            baseImageObj = null;
+            redraw();
+            return;
+        }
+        baseImageObj = new Image();
+        baseImageObj.onload = redraw;
+        baseImageObj.src = dataURL;
+    };
+
+    // Zeichnung als kompakte JSON in das Formularfeld schreiben
+    const save = () => {
+        const textarea = document.getElementById('[[Whiteboard#id]]');
+        if (!textarea) {
+            return;
+        }
+        if (strokes.length === 0 && !baseImage) {
+            textarea.value = '';
+            return;
+        }
+        const data = { v: 1, w: 800, h: 400, s: strokes };
+        if (baseImage) {
+            data.b = baseImage;
+        }
+        textarea.value = JSON.stringify(data);
+    };
+
+    const updateToolStates = () => {
+        document.getElementById('undoBtn').disabled = strokes.length === 0;
+        document.getElementById('redoBtn').disabled = redoStack.length === 0;
+    };
+
+    // --- Zeichnen: ein gemeinsamer Zeiger-Codepfad für Maus und Touch ---
+    canvas.addEventListener('pointerdown', (e) => {
+        if (e.pointerType === 'mouse' && e.button !== 0) {
+            return;
+        }
+        canvas.setPointerCapture(e.pointerId);
+        current = {
+            c: curColor,
+            w: isEraser ? curWidth + 4 : curWidth,
+            e: isEraser ? 1 : 0,
+            p: [toNorm(e)]
+        };
+        paintStroke(current); // Startpunkt als runder Punkt
+    });
+
+    canvas.addEventListener('pointermove', (e) => {
+        if (!current) {
+            return;
+        }
+        const p = toNorm(e);
+        const prev = current.p[current.p.length - 1];
+        const dx = p[0] - prev[0];
+        const dy = p[1] - prev[1];
+        if (dx * dx + dy * dy < MIN_POINT_DIST * MIN_POINT_DIST) {
+            return; // Punkt-Dünnung: zu dichte Punkte überspringen
+        }
+        current.p.push(p);
+        paintStroke({ c: current.c, w: current.w, e: current.e, p: [prev, p] }); // nur das neue Teilstück
+    });
+
+    const finishStroke = () => {
+        if (!current) {
+            return;
+        }
+        strokes.push(current);
+        current = null;
+        redoStack = [];
+        save();
+        updateToolStates();
+    };
+
+    canvas.addEventListener('pointerup', finishStroke);
+    canvas.addEventListener('pointercancel', () => {
+        current = null; // Unvollendeter Strich wird verworfen
+    });
+
+    // --- Werkzeuge ---
+    colorInput.addEventListener('input', () => {
+        curColor = colorInput.value;
+    });
+
+    const widthSelect = document.getElementById('selWidth');
+    widthSelect.addEventListener('change', () => {
+        curWidth = parseInt(widthSelect.value, 10);
+    });
+
+    const eraserBtn = document.getElementById('eraserBtn');
+    eraserBtn.addEventListener('click', () => {
+        isEraser = !isEraser;
+        eraserBtn.classList.toggle('is-active', isEraser);
+        eraserBtn.setAttribute('aria-pressed', isEraser ? 'true' : 'false');
+    });
+
+    document.getElementById('undoBtn').addEventListener('click', () => {
+        if (strokes.length === 0) {
+            return;
+        }
+        redoStack.push(strokes.pop());
+        redraw();
+        save();
+        updateToolStates();
+    });
+
+    document.getElementById('redoBtn').addEventListener('click', () => {
+        if (redoStack.length === 0) {
+            return;
+        }
+        strokes.push(redoStack.pop());
+        redraw();
+        save();
+        updateToolStates();
+    });
+
+    document.getElementById('clearButton').addEventListener('click', () => {
+        strokes.length = 0;
+        redoStack = [];
+        setBaseImage(null); // räumt den Untergrund auf und zeichnet neu
+        save();
+        updateToolStates();
+    });
+
+    // --- Vorhandene Zeichnung laden ---
+    // Im Add-Template rendert [[Whiteboard]] das Formularfeld → Wert aus dem Input lesen.
+    // In den Ansichts-Templates steht der Wert als Text → aus textContent lesen.
+    const rawDiv = document.querySelector('div.whiteboard-raw');
+    let loadedRaw = '';
+    if (rawDiv) {
+        const fieldInput = rawDiv.querySelector('input, textarea');
+        loadedRaw = (fieldInput ? (fieldInput.value || '') : (rawDiv.textContent || '')).trim();
     }
-  }
 
- function handleEnd(evt) {
-    evt.preventDefault();
-    const touches = evt.changedTouches;
-    for (let i = 0; i < touches.length; i++) {
-      const color = document.getElementById('selColor').value;
-      let idx = ongoingTouchIndexById(touches[i].identifier);
-      if (idx >= 0) {
-        context.lineWidth = document.getElementById('selWidth').value;
-        context.fillStyle = color;
-        ongoingTouches.splice(idx, 1); // remove it; we're done
-      }
+    if (loadedRaw.charAt(0) === '{') {
+        try {
+            const data = JSON.parse(loadedRaw);
+            (data.s || []).forEach((stroke) => strokes.push(stroke));
+            if (data.b) {
+                setBaseImage(data.b);
+            }
+        } catch {
+            /* Beschädigte Daten ignorieren */
+        }
+    } else {
+        const match = loadedRaw.match(/data:image\/png;base64,[^'"\s]+/);
+        if (match) {
+            setBaseImage(match[0]);
+        }
     }
-  }
 
-function handleCancel(evt) {
-  evt.preventDefault();
-  const touches = evt.changedTouches;
-  for (let i = 0; i < touches.length; i++) {
-    let idx = ongoingTouchIndexById(touches[i].identifier);
-    ongoingTouches.splice(idx, 1); // remove it; we're done
-  }
-}
+    // Erst zeichnen, wenn jstemplate.js geladen ist (liefert die gemeinsame Zeichenlogik)
+    document.addEventListener('DOMContentLoaded', () => {
+        redraw();
+        updateToolStates();
+    });
 
-function copyTouch({ identifier, clientX, clientY }) {
-  return { identifier, clientX, clientY };
-}
+    // --- Optionaler Canvas-Hintergrund (imgTemplate in jstemplate.js setzen) ---
+    window.addEventListener('load', () => {
+        if (typeof imgTemplate === 'undefined' || !imgTemplate) {
+            return;
+        }
+        const bg = new Image();
+        bg.onload = () => {
+            const ratio = Math.min(canvas.width / bg.width, canvas.height / bg.height);
+            canvas.style.backgroundImage = `url(${bg.src})`;
+            canvas.style.backgroundSize = `${bg.width * ratio}px ${bg.height * ratio}px`;
+            canvas.style.backgroundRepeat = 'no-repeat';
+            canvas.style.backgroundPosition = 'center';
+        };
+        bg.src = imgTemplate;
+    });
 
-function ongoingTouchIndexById(idToFind) {
-  for (let i = 0; i < ongoingTouches.length; i++) {
-    const id = ongoingTouches[i].identifier;
-    if (id === idToFind) {
-      return i;
-    }
-  }
-  return -1; // not found
-}
+    // --- Kartenfarbe: Kacheln einfärben, Canvas und Formular tönen ---
+    const radios = document.querySelectorAll('#setcolor input[type="radio"]');
 
-function drawLine(context, x1, y1, x2, y2) {
-  context.beginPath();
-  context.strokeStyle = document.getElementById('selColor').value;
-  context.lineWidth = document.getElementById('selWidth').value;
-  context.lineJoin = "round";
-  context.moveTo(x1, y1);
-  context.lineTo(x2, y2);
-  context.closePath();
-  context.stroke();
-}
+    // Die Text-Labels (white, yellow, pink, …) als runde Farbkacheln darstellen.
+    // Bekannte Werte bekommen den Pastellton der Karten, unbekannte den CSS-Farbnamen.
+    const colorHex = {
+        white: '#ffffff',
+        yellow: '#fde047',
+        pink: '#f9a8d4',
+        lightblue: '#bfdbfe',
+        lightgreen: '#bbf7d0'
+    };
 
-function eraseLine(context, x1, y1, x2, y2) {
-  context.globalCompositeOperation = "destination-out";
-  context.beginPath();
-  context.lineWidth = document.getElementById('selWidth').value + 4;
-  context.lineJoin = "round";
-  context.moveTo(x1, y1);
-  context.lineTo(x2, y2);
-  context.closePath();
-  context.stroke();
-  context.globalCompositeOperation = "source-over";
-}
+    radios.forEach((radio) => {
+        const label = document.querySelector(`label[for="${radio.id}"]`);
+        if (!label) {
+            return;
+        }
+        const value = (radio.value || '').trim().toLowerCase();
+        // Größe/Farbe direkt am Label setzen, damit Theme-CSS sie nicht überschreiben kann
+        // (gleicher Kreis-Look wie die Filter-Buttons in der Listenansicht: 26 px + feiner Rand)
+        label.style.display = 'inline-flex';
+        label.style.boxSizing = 'border-box';
+        label.style.width = '26px';
+        label.style.minWidth = '26px';
+        label.style.height = '26px';
+        label.style.padding = '0';
+        label.style.border = '1px solid rgba(15, 23, 42, .25)';
+        label.style.borderRadius = '50%';
+        label.style.overflow = 'hidden';
+        label.style.flex = '0 0 auto';
+        label.style.verticalAlign = 'middle';
+        label.style.backgroundColor = colorHex[value] || value || '#ffffff';
+        label.setAttribute('title', value);
+    });
 
-function clearArea() {
-  context.setTransform(1, 0, 0, 1, 0, 0);
-  context.clearRect(0, 0, context.canvas.width, context.canvas.height);
-}
+    const applyCanvasColor = (value) => {
+        // Gleiche Pastelltöne wie auf den Karten verwenden (nicht die rohen CSS-Farbnamen)
+        const v = (value || '').trim().toLowerCase();
+        const color = colorHex[v] || v || '#ffffff';
+        // Nur den Formularbereich als Vorschau der Kartenfarbe tönen;
+        // die Zeichenfläche bleibt überall weiß (wie in Listen-/Einzelansicht)
+        const form = document.querySelector('.defaulttemplate');
+        if (form) {
+            form.style.backgroundColor = color;
+        }
+    };
+
+    radios.forEach((radio) => {
+        if (radio.checked) {
+            applyCanvasColor(radio.value);
+        }
+        radio.addEventListener('change', () => applyCanvasColor(radio.value));
+    });
+
+    // Whiteboard-Bereich standardmäßig zuklappen
+    window.addEventListener('load', () => {
+        const details = document.getElementById('whiteboarddetails');
+        if (details) {
+            details.open = false;
+        }
+    });
+})();
 </script>
-
-<script>
-// Debounce function
-function debounce(func, wait) {
-  let timeout;
-  return function() {
-    const context = this;
-    const args = arguments;
-    clearTimeout(timeout);
-    document.getElementById("message").style.visibility = "visible"; // Show message
-    timeout = setTimeout(() => {
-      func.apply(context, args);
-      document.getElementById("message").style.visibility = "hidden"; // Hide message
-    }, wait);
-  };
-}
-
-
-// Event-Listener auf das Canvas setzen
-canvas.addEventListener("mousedown", debounce(function() {
-  var textarea = document.getElementById("[[Whiteboard#id]]");
-  // Canvas-Inhalt als Data-URL abrufen
-  var dataURL = canvas.toDataURL();
-  // Data-URL in Textarea einfügen
-  textarea.value = dataURL;
-}, 500)); // Wartezeit in Millisekunden
-
-canvas.addEventListener("mousemove", debounce(function() {
-  var textarea = document.getElementById("[[Whiteboard#id]]");
-  // Canvas-Inhalt als Data-URL abrufen
-  var dataURL = canvas.toDataURL();
-  // Data-URL in Textarea einfügen
-  textarea.value = dataURL;
-}, 500)); // Wartezeit in Millisekunden
-
-canvas.addEventListener("mouseup", debounce(function() {
-  var textarea = document.getElementById("[[Whiteboard#id]]");
-  // Canvas-Inhalt als Data-URL abrufen
-  var dataURL = canvas.toDataURL();
-  // Data-URL in Textarea einfügen
-  textarea.value = dataURL;
-}, 500)); // Wartezeit in Millisekunden
-
-// Event-Listener auf das Canvas setzen
-canvas.addEventListener("touchstart", debounce(function() {
-  var textarea = document.getElementById("[[Whiteboard#id]]");
-  // Canvas-Inhalt als Data-URL abrufen
-  var dataURL = canvas.toDataURL();
-  // Data-URL in Textarea einfügen
-  textarea.value = dataURL;
-}, 500)); // Wartezeit in Millisekunden
-
-canvas.addEventListener("touchmove", debounce(function() {
-  var textarea = document.getElementById("[[Whiteboard#id]]");
-  // Canvas-Inhalt als Data-URL abrufen
-  var dataURL = canvas.toDataURL();
-  // Data-URL in Textarea einfügen
-  textarea.value = dataURL;
-}, 500)); // Wartezeit in Millisekunden
-
-canvas.addEventListener("touchend", debounce(function() {
-  var textarea = document.getElementById("[[Whiteboard#id]]");
-  // Canvas-Inhalt als Data-URL abrufen
-  var dataURL = canvas.toDataURL();
-  // Data-URL in Textarea einfügen
-  textarea.value = dataURL;
-}, 500)); // Wartezeit in Millisekunden
-
-</script>
-<div id="message" class="alert alert-danger" style="visibility: hidden;margin: auto 0;">Drawing will be updated, please wait...</div>
-
-<script>
-window.onload = function() {
-  var details = document.querySelector("details");
-  details.open = false;
-};
-</script>
-
-<script>
-	const radios = document.getElementsByName('[[Color#id]]');
-// Überprüfen, welches Radio-Button ausgewählt ist
-		for (let i = 0; i < radios.length; i++) {
-			if (radios[i].checked) {
-				canvas.style.backgroundColor = radios[i].value;
-			}
-		}
-
-		// Hinzufügen eines "change"-Ereignisses zu jedem Radio-Button
-		for (let i = 0; i < radios.length; i++) {
-			radios[i].addEventListener('change', function() {
-				canvas.style.backgroundColor = this.value;
-			});
-		}
-	</script>

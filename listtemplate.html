@@ -1,19 +1,18 @@
 <div class="item">
-  <form name="drag-head##id##">
-    <div class="karte" style="background-color: [[Color]]">
-      <div class="dropdown dropleft" style="float:right">
-       ##actionsmenu##
-      </div>##userpicture## <span class="" style="font-size: small;"><strong>##user## </strong></span>
-      <div data-drog>
-     <br><span>[[Note]]</span></div><div class="dataurlview"><img class="whiteboardcontent" src="[[Whiteboard]]"></div>
-        <div style="text-align: right;font-size: small;">
-          <hr id="null">
-        ##comments## </div><div>
-          <div></div>
-        </div>
-      </div>
-  </form>
+  <div class="karte" data-color="[[Color]]">
+    <div class="dropdown dropleft note-actions">
+      ##actionsmenu##
+    </div>
+    <div class="note-head">
+      ##userpicture## <strong class="note-author">##user##</strong>
+    </div>
+    <div class="note-body">
+      [[Note]]
+      <div class="whiteboard-raw">[[Whiteboard]]</div>
+      <div class="dataurlview"></div>
+    </div>
+    <div class="note-footer">
+      ##comments##
+    </div>
+  </div>
 </div>
-<script>
-  Drog.on(document.forms['drag-head##id##']);
-</script>

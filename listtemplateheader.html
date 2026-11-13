@@ -24,25 +24,25 @@
         try {
             return localStorage.getItem('checkbox1') === 'true';
         } catch {
-            return false; // Speicher nicht verfügbar (z. B. privater Modus)
+            return false; // storage unavailable (e.g. private mode)
         }
     };
 
     const writeStored = (value) => {
         try {
             localStorage.setItem('checkbox1', JSON.stringify(value));
-        } catch { /* Speicher nicht verfügbar */ }
+        } catch { /* storage unavailable */ }
     };
 
     checkbox.checked = readStored();
 
-    // --- Schnellfilter nach Kartenfarbe ---
-    // Wird beim ersten Laden und nach jedem Inhalts-Refresh neu ausgeführt,
-    // damit die Filter-Buttons zu den aktuellen Karten passen.
+    // --- Quick filter by card color ---
+    // Runs on initial load and after every content refresh, so the filter
+    // buttons match the current cards.
     const applyFilter = () => {
         const filterButtons = document.querySelectorAll('.note-filter-all, .note-filter-btn');
 
-        // Farb-Buttons ohne zugehörige Karten ausblenden
+        // Hide color buttons without matching cards
         const available = [];
         document.querySelectorAll('#data-content .karte').forEach((card) => {
             const color = (card.getAttribute('data-color') || '').trim().toLowerCase();
@@ -57,7 +57,7 @@
             }
         });
 
-        // Aktiven Filter erneut anwenden (steht nach dem Refresh sonst auf keiner Karte)
+        // Re-apply the active filter (otherwise it matches no card after the refresh)
         const active = document.querySelector('.note-filter-all.is-active, .note-filter-btn.is-active');
         const filter = active ? active.dataset.filter : '';
         document.querySelectorAll('#data-content .item').forEach((item) => {
@@ -84,11 +84,11 @@
         });
     };
 
-    // --- Auto-Aktualisierung ohne Seitenneuladen ---
-    // Holt die Seite per fetch, parst sie und tauscht NUR den Karten-Inhalt aus.
-    // Kein location.reload() → kein Flackern, Scroll-Position bleibt erhalten.
-    // 15 s Intervall und nur bei sichtbarem Tab, um den Server zu schonen:
-    // Im Hintergrund liegende Tabs aktualisieren erst beim nächsten Tick nach der Rückkehr.
+    // --- Auto-reload without a full page reload ---
+    // Fetches the page, parses it and swaps ONLY the card content.
+    // No location.reload() → no flicker, scroll position is preserved.
+    // 15 s interval and only while the tab is visible, to be kind to the server:
+    // tabs in the background refresh on the next tick after returning.
     const refreshContent = () => {
         if (document.hidden) {
             return;
@@ -100,15 +100,15 @@
                 const board = document.getElementById('data-content');
                 if (next && board && next.innerHTML !== board.innerHTML) {
                     board.innerHTML = next.innerHTML;
-                    // Whiteboard-Zeichnungen der neuen Karten rendern
+                    // Render the whiteboard drawings of the new cards
                     if (window.StickyBoard && window.StickyBoard.renderAll) {
                         window.StickyBoard.renderAll();
                     }
-                    // Filter-Buttons und aktive Filterung an die neuen Karten anpassen
+                    // Adjust filter buttons and active filtering to the new cards
                     applyFilter();
                 }
             })
-            .catch(() => { /* Netzwerkfehler: der nächste Tick versucht es erneut */ });
+            .catch(() => { /* network error: the next tick will retry */ });
     };
 
     const applyAutoReload = () => {
@@ -124,7 +124,7 @@
     checkbox.addEventListener('change', applyAutoReload);
     applyAutoReload();
 
-    // 1000 Einträge pro Seite – einmal pro Sitzung setzen
+    // 1000 entries per page – set once per session
     try {
         if (sessionStorage.getItem('ChangeEntriesReload') === null) {
             sessionStorage.setItem('ChangeEntriesReload', 'true');
@@ -134,9 +134,9 @@
                 location.href = location.pathname + '?' + params.toString();
             }
         }
-    } catch { /* Speicher nicht verfügbar – Einstellung dann überspringen */ }
+    } catch { /* storage unavailable – skip the setting */ }
 
-    // Erst bei DOMContentLoaded: die Karten stehen im HTML NACH diesem Skript
+    // Only at DOMContentLoaded: the cards come AFTER this script in the HTML
     document.addEventListener('DOMContentLoaded', () => {
         bindFilterButtons();
         applyFilter();

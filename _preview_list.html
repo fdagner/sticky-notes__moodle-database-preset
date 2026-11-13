@@ -6,7 +6,7 @@
 <title>Sticky Notes – Vorschau Listenansicht</title>
 <link rel="stylesheet" href="csstemplate.css">
 <style>
-  /* Moodle-Näherung für die Vorschau */
+  /* Moodle approximation for the preview */
   body { font-family: -apple-system, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; margin: 0; padding: 24px; background: #f8f9fa; }
   .dropdown-toggle { border: none; background: transparent; font-size: 1.1rem; cursor: pointer; padding: 2px 6px; border-radius: 6px; }
   .dropdown-toggle:hover { background: rgba(0,0,0,.06); }
@@ -114,7 +114,7 @@
 
 <script src="jstemplate.js"></script>
 <script>
-// Filter-Logik aus listtemplateheader.html für die Vorschau nachbilden
+// Replicate the filter logic from listtemplateheader.html for the preview
 var filterButtons = document.querySelectorAll('.note-filter-all, .note-filter-btn');
 filterButtons.forEach(function (btn) {
   btn.addEventListener('click', function () {
@@ -130,7 +130,7 @@ filterButtons.forEach(function (btn) {
   });
 });
 
-// Farb-Buttons ohne zugehörige Karten ausblenden
+// Hide color buttons without matching cards
 var available = [];
 document.querySelectorAll('#data-content .karte').forEach(function (card) {
   var color = (card.getAttribute('data-color') || '').trim().toLowerCase();
